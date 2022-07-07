@@ -1,0 +1,62 @@
+{% extends "main_base.html" %} {% block head %} {{ super() }}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename= 'css/extended_beauty.css') }}"
+/>
+{% endblock %} {% block content %}
+
+<!---Containerize main page for styling--->
+<div class="page">
+  <!---Containerize paragraph and form for styling--->
+  <div class="container">
+    {% if current_user.is_authenticated%} {% with messages =
+    get_flashed_messages(with_categories=True) %} {% if messages %} {% for
+    category, message in messages %}
+    <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+    {% endfor %} {% endif %} {% endwith %}
+    <!-- List Start -->
+    <div class="card mb-2">
+      <div class="card-header container-fluid">
+        <div class="row">
+          <div class="col-md-10">
+            <!-- <h6 style="text-transform:uppercase;">STORES</h6> -->
+          </div>
+          <div class="col-md-2 float-right">
+            <button
+              class="btn btn-sm btn-primary float-right"
+              data-toggle="collapse"
+              data-target="#addSaccossCollapse"
+            >
+              <span data-feather="plus-circle"></span> Add Neww
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-sm" id="dataTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Current Name</th>
+                <th>Initial Name</th>
+                <th>Members</th>
+                <th>Date Started</th>
+                <th>District</th>
+                <th>Region</th>
+                <th>Model Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% endif %} {% if not current_user.is_authenticated%}
+    <p>Unlock your account</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

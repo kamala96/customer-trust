@@ -1,0 +1,66 @@
+{% extends "login_register_base.html" %} {% block head %} {{ super() }}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename= 'css/login_register_style.css') }}"
+/>
+{% endblock %} {% block content %}
+
+<section class="ftco-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="login-wrap p-4 p-md-5">
+          <div class="icon d-flex align-items-center justify-content-center">
+            <span class="fa fa-user-o"></span>
+          </div>
+          <h3 class="text-center mb-4">Unlock Your Account Here</h3>
+          <form
+            method="POST"
+            action="{{url_for('auth.login')}}"
+            class="login-form"
+          >
+            {{ form.csrf_token }} {% with messages =
+            get_flashed_messages(with_categories=True) %} {% if messages %} {%
+            for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">
+              {{ message }}
+            </div>
+            {% endfor %} {% endif %} {% endwith %}
+
+            <div class="form-group">
+              {{ form.email(class_="form-control rounded-left") }} {% if
+              form.email.errors %} {% for error in form.email.errors %}
+              <div class="error text-danger">{{ error }}</div>
+              {% endfor %} {% endif %}
+            </div>
+            <div class="form-group">
+              {{ form.password(class_="form-control rounded-left") }} {% if
+              form.password.errors %} {% for error in form.password.errors %}
+              <div class="error text-danger">{{ error }}</div>
+              {% endfor %} {% endif %}
+            </div>
+            <div class="form-group d-md-flex">
+              <div class="w-50">
+                <label class="checkbox-wrap checkbox-primary"
+                  >Remember Me {{ form.remember() }}
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+              <div class="w-50 text-md-right">
+                <a href="{{ url_for('auth.signup') }}"
+                  >Don't have an account?</a
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              {{ form.submit(class_="btn btn-primary rounded submit p-3 px-5")
+              }}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
