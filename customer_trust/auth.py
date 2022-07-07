@@ -1,5 +1,4 @@
 from flask import Blueprint, flash, render_template, url_for, request, redirect
-from matplotlib.pyplot import title
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required
 
