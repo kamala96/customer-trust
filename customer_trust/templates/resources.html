@@ -14,37 +14,74 @@
     category, message in messages %}
     <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
     {% endfor %} {% endif %} {% endwith %}
+
     <!-- List Start -->
     <div class="card mb-2">
       <div class="card-header container-fluid">
         <div class="row">
-          <div class="col-md-10">
-            <!-- <h6 style="text-transform:uppercase;">STORES</h6> -->
-          </div>
+          <div class="col-md-10">E-COMMERCE PLATFORMS</div>
           <div class="col-md-2 float-right">
             <button
               class="btn btn-sm btn-primary float-right"
               data-toggle="collapse"
-              data-target="#addSaccossCollapse"
+              data-target="#addPlatformCollapse"
             >
-              <span data-feather="plus-circle"></span> Add Neww
+              <i class="fa fa-fw fa-plus-circle"></i> Add New
             </button>
           </div>
         </div>
       </div>
       <div class="card-body">
+        <!-- Form Area Start - Add Platform -->
+        <div class="row mb-2">
+          <div class="col-12">
+            <div class="collapse" id="addPlatformCollapse">
+              <div class="card card-outline-info">
+                <div class="card-body">
+                  <form
+                    id="addPlatform"
+                    method="post"
+                    action="javascript:void(0);"
+                  >
+                    <div class="form-group row">
+                      <label for="pltName" class="col-sm-2 col-form-label"
+                        >Platform Name</label
+                      >
+                      <div class="col-sm-10">
+                        {{ pltform.platform_name(class_="form-control") }}
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="pltDesc" class="col-sm-2 col-form-label"
+                        >Platform Descriptions</label
+                      >
+                      <div class="col-sm-10">
+                        {{ pltform.platform_description(class_="form-control")}}
+                      </div>
+                    </div>
+                    <div class="form-row" id="category_specs"></div>
+                    <div class="form-group">
+                      {{ pltform.submit(class_="btn btn-primary")}}
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Form End Area - Platform-->
+
         <div class="table-responsive">
-          <table class="table table-sm" id="dataTable">
+          <table
+            id="platforms_data"
+            class="display table table-striped table-sm"
+            style="width: 100%"
+          >
             <thead>
               <tr>
-                <th>#</th>
-                <th>Current Name</th>
-                <th>Initial Name</th>
-                <th>Members</th>
-                <th>Date Started</th>
-                <th>District</th>
-                <th>Region</th>
-                <th>Model Status</th>
+                <th>Name</th>
+                <th>Descriptions</th>
+                <th>Date Created</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -53,10 +90,153 @@
         </div>
       </div>
     </div>
+
     {% endif %} {% if not current_user.is_authenticated%}
     <p>Unlock your account</p>
     {% endif %}
   </div>
 </div>
 
+{% endblock %} {% block scripts %}
+<script>
+  $(document).ready(function () {
+    var title = "E-COMMERCE PLATFORMS";
+    var url = "{{ url_for('main.platforms_data') }}";
+    $("#platforms_data").DataTable({
+      ajax: url,
+      serverSide: true,
+      columns: [
+        { data: "platform_name" },
+        { data: "platform_desc", orderable: false },
+        { data: "date_created" },
+      ],
+      pageLength: 5,
+      dom: "Bfrtip",
+      buttons: [
+        "copy",
+        "csv",
+        "excel",
+        "pdf",
+        {
+          extend: "print",
+          title: title,
+          exportOptions: {
+            columns: [0, 1, 2],
+          },
+        },
+      ],
+
+      columnDefs: [
+        { targets: 1, defaultContent: "<i>Not set</i>" },
+        {
+          targets: 3,
+          data: null,
+          orderable: false,
+          render: function (data, type, row) {
+            return (
+              '<button onclick="deletePlatformClicked(' +
+              row["platform_id"] +
+              ')" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> Delete</button>'
+            );
+          },
+        },
+      ],
+    });
+  });
+
+  // Delete platform
+  function deletePlatformClicked(id) {
+    bootbox.confirm({
+      message: "Do you really want to remove this entry?",
+      buttons: {
+        confirm: {
+          label: '<i class="fa fa-check"></i> Yes',
+          className: "btn-success",
+        },
+        cancel: {
+          label: '<i class="fa fa-times"></i> No',
+          className: "btn-danger",
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          var dialog = bootbox
+            .dialog({
+              title: "Please wait while we do something...",
+              message:
+                '<p><i class="fa fa-spin fa-spinner"></i> Internal process is on progress</p>',
+              closeButton: false,
+            })
+            .on("shown.bs.modal", function () {
+              var url = "{{ url_for('main.delete_platform') }}";
+              $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "JSON",
+                data: { id: id },
+                success: function (data) {
+                  $("#platforms_data").DataTable().ajax.reload();
+                  bootbox.alert(data.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  bootbox.alert(errorThrown.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+              });
+            });
+        }
+      },
+    });
+  }
+
+  // Add platforms
+  $(function () {
+    $("#addPlatform").validate({
+      rules: { platform_name: { required: true } },
+      messages: {},
+
+      submitHandler: function () {
+        var dialog = bootbox
+          .dialog({
+            title: "Please wait while we do something...",
+            message:
+              '<p><i class="fa fa-spin fa-spinner"></i> Internal process is on progress</p>',
+            closeButton: false,
+          })
+          .on("shown.bs.modal", function () {
+            var url = "{{ url_for('main.add_platform') }}";
+            var formdata = $("#addPlatform").serialize();
+            $.ajax({
+              url: url,
+              type: "POST",
+              data: formdata,
+              dataType: "JSON",
+              success: function (data) {
+                if (data.status) {
+                  $(".collapse").collapse("hide");
+                  $("#addPlatform")[0].reset();
+                  $("#platforms_data").DataTable().ajax.reload();
+                  bootbox.alert(data.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                } else {
+                  bootbox.alert(data.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                }
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                bootbox.alert(errorThrown.toString(), function () {
+                  dialog.modal("hide");
+                });
+              },
+            });
+          });
+      },
+    });
+  });
+</script>
 {% endblock %}

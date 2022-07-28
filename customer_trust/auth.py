@@ -5,9 +5,13 @@ from flask_login import login_user, logout_user, login_required
 from .forms import LoginForm, RegisterForm
 from .models import User
 from . import PORTAL_TITLE, db
+from flask_wtf.csrf import CSRFProtect
 
+
+csrf = CSRFProtect()
 
 auth = Blueprint('auth', __name__)
+# csrf.exempt(auth)
 
 
 @auth.route('/signup', methods=['GET', 'POST'])
@@ -30,11 +34,12 @@ def signup():
 
 
 @auth.route('/login', methods=['GET', 'POST'])
+# @csrf.exempt
 def login():
     title = PORTAL_TITLE + ' - Login Page'
 
-    form = LoginForm(request.form)
-    if request.method == 'POST' and form.validate():
+    form = LoginForm()
+    if form.validate_on_submit():
         user = User.query.filter_by(user_email=form.email.data).first()
 
         if not user or not check_password_hash(user.user_password, form.password.data):

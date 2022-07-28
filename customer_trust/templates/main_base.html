@@ -32,9 +32,15 @@
       rel="stylesheet"
       href="{{ url_for('static', filename= 'css/buttons.dataTables.min.css') }}"
     />
-    <link
+
+    <!-- <link
       rel="stylesheet"
       href="{{ url_for('static', filename= 'css/font-awesome.min.css') }}"
+    /> -->
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
     {% endblock %}
   </head>
@@ -122,7 +128,26 @@
     <script src="{{ url_for('static', filename= 'js/vfs_fonts.js') }}"></script>
     <script src="{{ url_for('static', filename= 'js/buttons.html5.min.js') }}"></script>
     <script src="{{ url_for('static', filename= 'js/buttons.print.min.js') }}"></script>
+
+    <!-- jquery validate library -->
+    <script src="{{ url_for('static', filename= 'js/jquery.validate.js') }}"></script>
+
+    <!-- Bootbox library -->
+    <script src="{{ url_for('static', filename= 'js/bootbox.min.js') }}"></script>
     <script>
+      var csrf_token = "{{ csrf_token() }}";
+
+      $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+          if (
+            !/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) &&
+            !this.crossDomain
+          ) {
+            xhr.setRequestHeader("X-CSRFToken", csrf_token);
+          }
+        },
+      });
+
       $(function () {
         $(".nav ul li").on("click", function () {
           //$(this).addClass('active').removeClass('off').siblings().addClass('off').removeClass('active'); // no need to add .off
@@ -130,5 +155,6 @@
         });
       });
     </script>
+    {% block scripts %} {% endblock %}
   </body>
 </html>
