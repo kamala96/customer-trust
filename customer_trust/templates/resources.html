@@ -15,81 +15,416 @@
     <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
     {% endfor %} {% endif %} {% endwith %}
 
-    <!-- List Start -->
-    <div class="card mb-2">
-      <div class="card-header container-fluid">
-        <div class="row">
-          <div class="col-md-10">E-COMMERCE PLATFORMS</div>
-          <div class="col-md-2 float-right">
-            <button
-              class="btn btn-sm btn-primary float-right"
-              data-toggle="collapse"
-              data-target="#addPlatformCollapse"
-            >
-              <i class="fa fa-fw fa-plus-circle"></i> Add New
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <!-- Form Area Start - Add Platform -->
-        <div class="row mb-2">
-          <div class="col-12">
-            <div class="collapse" id="addPlatformCollapse">
-              <div class="card card-outline-info">
-                <div class="card-body">
-                  <form
-                    id="addPlatform"
-                    method="post"
-                    action="javascript:void(0);"
-                  >
-                    <div class="form-group row">
-                      <label for="pltName" class="col-sm-2 col-form-label"
-                        >Platform Name</label
-                      >
-                      <div class="col-sm-10">
-                        {{ pltform.platform_name(class_="form-control") }}
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label for="pltDesc" class="col-sm-2 col-form-label"
-                        >Platform Descriptions</label
-                      >
-                      <div class="col-sm-10">
-                        {{ pltform.platform_description(class_="form-control")}}
-                      </div>
-                    </div>
-                    <div class="form-row" id="category_specs"></div>
-                    <div class="form-group">
-                      {{ pltform.submit(class_="btn btn-primary")}}
-                    </div>
-                  </form>
-                </div>
-              </div>
+    <!-- ACCORDION START -->
+    <div id="accordion">
+      <!-- E-COMMERCE PLATFORMS Start -->
+      <div class="card mb-2">
+        <div class="card-header container-fluid">
+          <div class="row">
+            <div class="col-lg-10 col-md-10">
+              <h5 class="mb-0" id="pltHeading">
+                <button
+                  class="btn btn-link"
+                  data-toggle="collapse"
+                  data-target="#hideShowPlt"
+                  aria-expanded="true"
+                  aria-controls="hideShowPlt"
+                >
+                  <i class="fas fa-info-circle"></i>
+                  E-COMMERCE PLATFORMS
+                </button>
+              </h5>
+            </div>
+            <div class="col-lg-2 col-md-2">
+              <button
+                class="btn btn-sm btn-primary"
+                data-toggle="collapse"
+                data-target="#addPlatformCollapse"
+              >
+                <i class="fa fa-fw fa-plus-circle"></i> Add New Platform
+              </button>
             </div>
           </div>
         </div>
-        <!-- Form End Area - Platform-->
 
-        <div class="table-responsive">
-          <table
-            id="platforms_data"
-            class="display table table-striped table-sm"
-            style="width: 100%"
-          >
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Descriptions</th>
-                <th>Date Created</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+        <div
+          id="hideShowPlt"
+          class="collapse show"
+          aria-labelledby="pltHeading"
+          data-parent="#accordion"
+        >
+          <div class="card-body">
+            <!-- Form Area Start - Add Platform -->
+            <div class="row mb-2">
+              <div class="col-12">
+                <div class="collapse" id="addPlatformCollapse">
+                  <div class="card card-outline-info">
+                    <div class="card-body">
+                      <form
+                        id="addPlatform"
+                        method="post"
+                        action="javascript:void(0);"
+                      >
+                        <div class="form-group row">
+                          <label
+                            for="pltName"
+                            class="col-sm-12 col-md-12 col-lg-2 col-form-label"
+                            >Platform Name</label
+                          >
+                          <div class="col-sm-12 col-md-12 col-lg-10">
+                            {{ pltform.platform_name(class_="form-control") }}
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label
+                            for="pltDesc"
+                            class="col-sm-12 col-md-12 col-lg-2 col-form-label"
+                            >Platform Descriptions</label
+                          >
+                          <div class="col-sm-12 col-md-12 col-lg-10">
+                            {{
+                            pltform.platform_description(class_="form-control")}}
+                          </div>
+                        </div>
+                        <div class="form-row" id="category_specs"></div>
+                        <div class="form-group">
+                          {{ pltform.submit(class_="btn btn-primary")}}
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Form End Area - Platform-->
+            <div class="table-responsive">
+              <table
+                id="platforms_data"
+                class="display table table-striped table-sm"
+                style="width: 100%"
+              >
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Descriptions</th>
+                    <th>Date Added</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
+      <!-- E-COMMERCE PLATFORMS END -->
+
+      <!-- E-COMMERCE PRODUCTS Start -->
+      <div class="card mb-2">
+        <div class="card-header container-fluid">
+          <div class="row">
+            <div class="col-lg-10 col-md-10">
+              <h5 class="mb-0" id="prodHeading">
+                <button
+                  class="btn btn-link"
+                  data-toggle="collapse"
+                  data-target="#hideShowProd"
+                  aria-expanded="true"
+                  aria-controls="hideShowProd"
+                >
+                  <i class="fas fa-info-circle"></i>
+                  E-COMMERCE PRODUCTS
+                </button>
+              </h5>
+            </div>
+            <div class="col-md-2 float-right">
+              <button
+                class="btn btn-sm btn-primary float-right"
+                data-toggle="collapse"
+                data-target="#addProductCollapse"
+              >
+                <i class="fa fa-fw fa-plus-circle"></i> Add New Product
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          id="hideShowProd"
+          class="collapse show"
+          aria-labelledby="prodHeading"
+          data-parent="#accordion"
+        >
+          <div class="card-body">
+            <!-- Form Area Start - Add Product -->
+            <div class="row mb-2">
+              <div class="col-12">
+                <div class="collapse" id="addProductCollapse">
+                  <div class="card card-outline-info">
+                    <div class="card-body">
+                      <form
+                        id="addProduct"
+                        method="post"
+                        action="javascript:void(0);"
+                      >
+                        <div class="form-group row">
+                          <label
+                            for="pltName"
+                            class="col-sm-12 col-md-12 col-lg-2 col-form-label"
+                            >Product Name</label
+                          >
+                          <div class="col-sm-12 col-md-12 col-lg-10">
+                            {{ productform.product_name(class_="form-control")
+                            }}
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label
+                            for="pltDesc"
+                            class="col-sm-12 col-md-12 col-lg-2 col-form-label"
+                            >Product Descriptions</label
+                          >
+                          <div class="col-sm-12 col-md-12 col-lg-10">
+                            {{
+                            productform.product_description(class_="form-control")}}
+                          </div>
+                        </div>
+                        <div class="form-row" id="category_specs"></div>
+                        <div class="form-group">
+                          {{ pltform.submit(class_="btn btn-primary")}}
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Form End Area - Product-->
+
+            <div class="table-responsive">
+              <table
+                id="products_data"
+                class="display table table-striped table-sm"
+                style="width: 100%"
+              >
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Descriptions</th>
+                    <th>Active Platforms</th>
+                    <th>Date Added</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- E-COMMERCE PRODUCTS END -->
+
+      <!-- E-COMMERCE TRUST FACTORS Start -->
+      <div class="card mb-2">
+        <div class="card-header container-fluid">
+          <div class="row">
+            <div class="col-lg-10 col-md-10">
+              <h5 class="mb-0" id="factorsHeading">
+                <button
+                  class="btn btn-link"
+                  data-toggle="collapse"
+                  data-target="#hideShowFactors"
+                  aria-expanded="true"
+                  aria-controls="hideShowFactors"
+                >
+                  <i class="fas fa-info-circle"></i>
+                  E-COMMERCE TRUST FACTORS
+                </button>
+              </h5>
+            </div>
+            <div class="col-md-2 float-right">
+              <button
+                class="btn btn-sm btn-primary float-right"
+                data-toggle="collapse"
+                data-target="#addFactorCollapse"
+              >
+                <i class="fa fa-fw fa-plus-circle"></i> New Trust Factor
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          id="hideShowFactors"
+          class="collapse show"
+          aria-labelledby="factorsHeading"
+          data-parent="#accordion"
+        >
+          <div class="card-body">
+            <!-- Form Area Start - Add Factor -->
+            <div class="row mb-2">
+              <div class="col-12">
+                <div class="collapse" id="addFactorCollapse">
+                  <div class="card card-outline-info">
+                    <div class="card-body">
+                      <form
+                        id="addFactor"
+                        method="post"
+                        action="javascript:void(0);"
+                      >
+                        <div class="form-group row">
+                          <label
+                            for="pltName"
+                            class="col-sm-12 col-md-12 col-lg-2 col-form-label"
+                            >Factor Name</label
+                          >
+                          <div class="col-sm-12 col-md-12 col-lg-10">
+                            {{ factorform.factor_name(class_="form-control") }}
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label
+                            for="pltDesc"
+                            class="col-sm-12 col-md-12 col-lg-2 col-form-label"
+                            >Factor Descriptions</label
+                          >
+                          <div class="col-sm-12 col-md-12 col-lg-10">
+                            {{
+                            factorform.factor_description(class_="form-control")}}
+                          </div>
+                        </div>
+                        <div class="form-row" id="category_specs"></div>
+                        <div class="form-group">
+                          {{ pltform.submit(class_="btn btn-primary")}}
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Form End Area - Factor-->
+
+            <div class="table-responsive">
+              <table
+                id="factors_data"
+                class="display table table-striped table-sm"
+                style="width: 100%"
+              >
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Descriptions</th>
+                    <th>Active Products</th>
+                    <th>Date Added</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- E-COMMERCE TRUST FACTORS END -->
+
+      <!-- SENTIMENTS START -->
+      <div class="card mb-2">
+        <div class="card-header container-fluid">
+          <div class="row">
+            <div class="col-lg-10 col-md-10">
+              <h5 class="mb-0" id="sentimentsHeading">
+                <button
+                  class="btn btn-link"
+                  data-toggle="collapse"
+                  data-target="#hideShowSentiments"
+                  aria-expanded="true"
+                  aria-controls="hideShowSentiments"
+                >
+                  <i class="fas fa-info-circle"></i>
+                  CUSTOMER SENTIMENTS
+                </button>
+              </h5>
+            </div>
+            <div class="col-md-2 float-right">
+              <button
+                class="btn btn-sm btn-primary float-right"
+                data-toggle="collapse"
+                data-target="#addSentimentsCollapse"
+              >
+                <i class="fa fa-fw fa-file-import"></i> Import Sentiments
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          id="hideShowSentiments"
+          class="collapse show"
+          aria-labelledby="sentimentsHeading"
+          data-parent="#accordion"
+        >
+          <div class="card-body">
+            <!-- Form Area Start - Add Sentiments -->
+            <div class="row mb-2">
+              <div class="col-12">
+                <div class="collapse" id="addSentimentsCollapse">
+                  <div class="card card-outline-info">
+                    <div class="card-body">
+                      <form
+                        id="addSentiments"
+                        method="post"
+                        action="javascript:void(0);"
+                        enctype="multipart/form-data"
+                      >
+                        <div class="form-group row">
+                          <label
+                            for="pltName"
+                            class="col-sm-12 col-md-12 col-lg-2 col-form-label"
+                            >Sentiments File</label
+                          >
+                          <div class="col-sm-12 col-md-12 col-lg-10">
+                            {{ sentimentForm.document(class_="form-control") }}
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <div class="col-sm-10">
+                            {{ sentimentForm.submit(class_="btn btn-primary") }}
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Form End Area - Sentiments-->
+
+            <div class="table-responsive">
+              <table
+                id="sentiments_data"
+                class="display table table-striped table-sm"
+                style="width: 100%"
+              >
+                <thead>
+                  <tr>
+                    <th>Sentiment</th>
+                    <th>Trust Factor</th>
+                    <th>Product</th>
+                    <th>Platform</th>
+                    <th>Date Added</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- SENTIMENTS END -->
     </div>
+    <!-- ACCORDION END -->
 
     {% endif %} {% if not current_user.is_authenticated%}
     <p>Unlock your account</p>
@@ -99,11 +434,15 @@
 
 {% endblock %} {% block scripts %}
 <script>
+  // ###########################################################################
+  // ################   PAGE LOADED START  #######################################
+  // ###########################################################################
   $(document).ready(function () {
-    var title = "E-COMMERCE PLATFORMS";
-    var url = "{{ url_for('main.platforms_data') }}";
+    // DISPLAY E-COMMERCE PLATFORMS START - ON PAGE LOAD
+    var plt_title = "E-COMMERCE PLATFORMS";
+    var plt_url = "{{ url_for('main.platforms_data') }}";
     $("#platforms_data").DataTable({
-      ajax: url,
+      ajax: plt_url,
       serverSide: true,
       columns: [
         { data: "platform_name" },
@@ -113,13 +452,37 @@
       pageLength: 5,
       dom: "Bfrtip",
       buttons: [
-        "copy",
-        "csv",
-        "excel",
-        "pdf",
+        {
+          extend: "copy",
+          title: plt_title,
+          exportOptions: {
+            columns: [0, 1, 2],
+          },
+        },
+        {
+          extend: "csv",
+          title: plt_title,
+          exportOptions: {
+            columns: [0, 1, 2],
+          },
+        },
+        {
+          extend: "excel",
+          title: plt_title,
+          exportOptions: {
+            columns: [0, 1, 2],
+          },
+        },
+        {
+          extend: "pdf",
+          title: plt_title,
+          exportOptions: {
+            columns: [0, 1, 2],
+          },
+        },
         {
           extend: "print",
-          title: title,
+          title: plt_title,
           exportOptions: {
             columns: [0, 1, 2],
           },
@@ -127,7 +490,7 @@
       ],
 
       columnDefs: [
-        { targets: 1, defaultContent: "<i>Not set</i>" },
+        { targets: "_all", defaultContent: "<i>Not set</i>" },
         {
           targets: 3,
           data: null,
@@ -136,63 +499,289 @@
             return (
               '<button onclick="deletePlatformClicked(' +
               row["platform_id"] +
-              ')" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> Delete</button>'
+              ')" type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</button>'
             );
           },
         },
       ],
     });
-  });
+    // DISPLAY E-COMMERCE PLATFORMS END - ON PAGE LOAD
 
-  // Delete platform
-  function deletePlatformClicked(id) {
-    bootbox.confirm({
-      message: "Do you really want to remove this entry?",
-      buttons: {
-        confirm: {
-          label: '<i class="fa fa-check"></i> Yes',
-          className: "btn-success",
+    // ##############################################################
+
+    // DISPLAY E-COMMERCE PRODUCTS START - ON PAGE LOAD
+    var products_title = "E-COMMERCE PRODUCTS";
+    var products_url = "{{ url_for('main.products_data') }}";
+    $("#products_data").DataTable({
+      ajax: products_url,
+      serverSide: true,
+      columns: [
+        { data: "product_name" },
+        { data: "product_desc", orderable: false },
+        { data: "product_platform", orderable: false },
+        { data: "date_created" },
+      ],
+      pageLength: 5,
+      dom: "Bfrtip",
+      buttons: [
+        {
+          extend: "copy",
+          title: products_title,
+          exportOptions: {
+            columns: [0, 1, 2, 3],
+          },
         },
-        cancel: {
-          label: '<i class="fa fa-times"></i> No',
-          className: "btn-danger",
+        {
+          extend: "csv",
+          title: products_title,
+          exportOptions: {
+            columns: [0, 1, 2, 3],
+          },
         },
-      },
-      callback: function (result) {
-        if (result == true) {
-          var dialog = bootbox
-            .dialog({
-              title: "Please wait while we do something...",
-              message:
-                '<p><i class="fa fa-spin fa-spinner"></i> Internal process is on progress</p>',
-              closeButton: false,
-            })
-            .on("shown.bs.modal", function () {
-              var url = "{{ url_for('main.delete_platform') }}";
-              $.ajax({
-                url: url,
-                type: "POST",
-                dataType: "JSON",
-                data: { id: id },
-                success: function (data) {
-                  $("#platforms_data").DataTable().ajax.reload();
-                  bootbox.alert(data.message.toString(), function () {
-                    dialog.modal("hide");
-                  });
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                  bootbox.alert(errorThrown.toString(), function () {
-                    dialog.modal("hide");
-                  });
-                },
-              });
-            });
-        }
-      },
+        {
+          extend: "excel",
+          title: products_title,
+          exportOptions: {
+            columns: [0, 1, 2, 3],
+          },
+        },
+        {
+          extend: "pdf",
+          title: products_title,
+          exportOptions: {
+            columns: [0, 1, 2, 3],
+          },
+        },
+        {
+          extend: "print",
+          title: products_title,
+          exportOptions: {
+            columns: [0, 1, 2, 3],
+          },
+        },
+      ],
+
+      columnDefs: [
+        {
+          targets: 2,
+          data: null,
+          render: function (data, type, row) {
+            let addBtn =
+              '<button onclick="productAddPlatformClicked(' +
+              row["product_id"] +
+              ')" type="button" class="btn btn-primary btn-sm" title="Add Platform"><i class="fas fa-plus-circle"></i></button>';
+            if (row["product_platform"]) {
+              let plt = row["product_platform"];
+              const substr = plt.split("_");
+              let delBtn = "";
+              for (let i = 0; i < substr.length; ++i) {
+                let param1 = substr[i];
+                let param2 = row["product_id"];
+                let param = param1.concat("_str_", param2);
+                delBtn +=
+                  "<button onclick=\"productDelPlatformClicked('" +
+                  param +
+                  '\')" type="button" class="btn btn-outline-danger btn-sm mr-1" title="Remove Platform"> <i class="fas fa-minus-circle"></i> ' +
+                  substr[i] +
+                  "</button>";
+              }
+              return delBtn + "| " + addBtn;
+            } else {
+              return addBtn;
+            }
+          },
+        },
+        {
+          targets: 4,
+          data: null,
+          orderable: false,
+          render: function (data, type, row) {
+            return (
+              '<button onclick="deleteProductClicked(' +
+              row["product_id"] +
+              ')" type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>  Delete</button>'
+            );
+          },
+        },
+      ],
     });
-  }
+    // DISPLAY E-COMMERCE PRODUCTS END - ON PAGE LOAD
 
-  // Add platforms
+    // ##############################################################
+
+    // DISPLAY E-COMMERCE TRUST FACTORS START - ON PAGE LOAD
+    var factors_title = "E-COMMERCE TRUST FACTORS";
+    $("#factors_data").DataTable({
+      ajax: "{{ url_for('main.factors_data') }}",
+      serverSide: true,
+      columns: [
+        { data: "factor_name" },
+        { data: "factor_desc", orderable: false },
+        { data: "factor_products", orderable: false },
+        { data: "date_created" },
+      ],
+      pageLength: 5,
+      dom: "Bfrtip",
+      buttons: [
+        {
+          extend: "copy",
+          title: factors_title,
+          exportOptions: {
+            columns: [0, 1, 2, 3],
+          },
+        },
+        {
+          extend: "csv",
+          title: factors_title,
+          exportOptions: {
+            columns: [0, 1, 2, 3],
+          },
+        },
+        {
+          extend: "excel",
+          title: factors_title,
+          exportOptions: {
+            columns: [0, 1, 2, 3],
+          },
+        },
+        {
+          extend: "pdf",
+          title: factors_title,
+          exportOptions: {
+            columns: [0, 1, 2, 3],
+          },
+        },
+        {
+          extend: "print",
+          title: factors_title,
+          exportOptions: {
+            columns: [0, 1, 2, 3],
+          },
+        },
+      ],
+
+      columnDefs: [
+        {
+          targets: 2,
+          data: null,
+          render: function (data, type, row) {
+            let addBtn =
+              '<button onclick="factorAddProductClicked(' +
+              row["factor_id"] +
+              ')" type="button" class="btn btn-primary btn-sm" title="Add Product"><i class="fas fa-plus-circle"></i></button>';
+            if (row["factor_products"]) {
+              let prod = row["factor_products"];
+              const substr = prod.split("_");
+              let delBtn = "";
+              for (let i = 0; i < substr.length; ++i) {
+                let param1 = substr[i];
+                let param2 = row["factor_id"];
+                let param = param1.concat("_str_", param2);
+                delBtn +=
+                  "<button onclick=\"factorDelProductClicked('" +
+                  param +
+                  '\')" type="button" class="btn btn-outline-danger btn-sm mr-1" title="Remove Product"> <i class="fas fa-minus-circle"></i> ' +
+                  substr[i] +
+                  "</button>";
+              }
+              return delBtn + "| " + addBtn;
+            } else {
+              return addBtn;
+            }
+          },
+        },
+        {
+          targets: 4,
+          data: null,
+          orderable: false,
+          render: function (data, type, row) {
+            return (
+              '<button onclick="deleteFactorClicked(' +
+              row["factor_id"] +
+              ')" type="button" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i>  Delete</button>'
+            );
+          },
+        },
+      ],
+    });
+    // DISPLAY E-COMMERCE E-COMMERCE TRUST FACTORS END - ON PAGE LOAD
+
+    // ##############################################################
+
+    // DISPLAY SENTIMENTS - ON PAGE LOAD
+    var sentiments_title = "CONSUMERS SENTIMENTS";
+    $("#sentiments_data").DataTable({
+      ajax: "{{ url_for('main.sentiments_data') }}",
+      serverSide: true,
+      columns: [
+        { data: "sentiment_text" },
+        { data: "sentiment_factor" },
+        { data: "sentiment_product" },
+        { data: "sentiment_platform" },
+        { data: "date_created" },
+      ],
+      pageLength: 5,
+      dom: "Bfrtip",
+      buttons: [
+        {
+          extend: "copy",
+          title: sentiments_title,
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4],
+          },
+        },
+        {
+          extend: "csv",
+          title: sentiments_title,
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4],
+          },
+        },
+        {
+          extend: "excel",
+          title: sentiments_title,
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4],
+          },
+        },
+        {
+          extend: "pdf",
+          title: sentiments_title,
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4],
+          },
+        },
+        {
+          extend: "print",
+          title: sentiments_title,
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4],
+          },
+        },
+      ],
+
+      columnDefs: [
+        {
+          targets: 5,
+          data: null,
+          orderable: false,
+          render: function (data, type, row) {
+            return (
+              '<button onclick="deleteSentimentClicked(' +
+              row["sentiment_id"] +
+              ')" type="button" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i>  Delete</button>'
+            );
+          },
+        },
+      ],
+    });
+    // DISPLAY SENTIMENTS END - ON PAGE LOAD
+  });
+  // ###########################################################################
+  // ################   PAGE LOADED END  #######################################
+  // ###########################################################################
+
+  // ###### Add platform - START
   $(function () {
     $("#addPlatform").validate({
       rules: { platform_name: { required: true } },
@@ -201,9 +790,8 @@
       submitHandler: function () {
         var dialog = bootbox
           .dialog({
-            title: "Please wait while we do something...",
             message:
-              '<p><i class="fa fa-spin fa-spinner"></i> Internal process is on progress</p>',
+              '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
             closeButton: false,
           })
           .on("shown.bs.modal", function () {
@@ -216,7 +804,7 @@
               dataType: "JSON",
               success: function (data) {
                 if (data.status) {
-                  $(".collapse").collapse("hide");
+                  $("#addPlatformCollapse").collapse("hide");
                   $("#addPlatform")[0].reset();
                   $("#platforms_data").DataTable().ajax.reload();
                   bootbox.alert(data.message.toString(), function () {
@@ -238,5 +826,652 @@
       },
     });
   });
+  // ###### Add platform - END
+
+  // ###### Delete platform - START
+  function deletePlatformClicked(id) {
+    bootbox.confirm({
+      message: "Do you really want to remove this entry?",
+      buttons: {
+        confirm: {
+          label: '<i class="fa fa-check"></i> Yes',
+          className: "btn-success",
+        },
+        cancel: {
+          label: '<i class="fa fa-times"></i> No',
+          className: "btn-danger",
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          var dialog = bootbox
+            .dialog({
+              message:
+                '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+              closeButton: false,
+            })
+            .on("shown.bs.modal", function () {
+              var url = "{{ url_for('main.delete_platform') }}";
+              $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "JSON",
+                data: { id: id },
+                success: function (data) {
+                  $("#platforms_data").DataTable().ajax.reload();
+                  $("#products_data").DataTable().ajax.reload();
+                  $("#sentiments_data").DataTable().ajax.reload();
+                  bootbox.alert(data.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  bootbox.alert(errorThrown.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+              });
+            });
+        }
+      },
+    });
+  }
+  // ###### Delete platform - END
+  //
+
+  // ###### Add product - START
+  $(function () {
+    $("#addProduct").validate({
+      rules: { product_name: { required: true } },
+      messages: {},
+
+      submitHandler: function () {
+        var dialog = bootbox
+          .dialog({
+            message:
+              '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+            closeButton: false,
+          })
+          .on("shown.bs.modal", function () {
+            var url = "{{ url_for('main.add_product') }}";
+            var formdata = $("#addProduct").serialize();
+            $.ajax({
+              url: url,
+              type: "POST",
+              data: formdata,
+              dataType: "JSON",
+              success: function (data) {
+                if (data.status) {
+                  $("#addProductCollapse").collapse("hide");
+                  $("#addProduct")[0].reset();
+                  $("#products_data").DataTable().ajax.reload();
+                  bootbox.alert(data.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                } else {
+                  bootbox.alert(data.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                }
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                bootbox.alert(errorThrown.toString(), function () {
+                  dialog.modal("hide");
+                });
+              },
+            });
+          });
+      },
+    });
+  });
+  // ###### Add product - END
+
+  // ###### Delete product - START
+  function deleteProductClicked(id) {
+    bootbox.confirm({
+      message: "Do you really want to remove this entry?",
+      buttons: {
+        confirm: {
+          label: '<i class="fa fa-check"></i> Yes',
+          className: "btn-success",
+        },
+        cancel: {
+          label: '<i class="fa fa-times"></i> No',
+          className: "btn-danger",
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          var dialog = bootbox
+            .dialog({
+              message:
+                '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+              closeButton: false,
+            })
+            .on("shown.bs.modal", function () {
+              var url = "{{ url_for('main.delete_product') }}";
+              $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "JSON",
+                data: { id: id },
+                success: function (data) {
+                  $("#products_data").DataTable().ajax.reload();
+                  $("#factors_data").DataTable().ajax.reload();
+                  $("#sentiments_data").DataTable().ajax.reload();
+                  bootbox.alert(data.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  bootbox.alert(errorThrown.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+              });
+            });
+        }
+      },
+    });
+  }
+  // ###### Delete product - END
+
+  // a button for adding platform to product clicked -- start
+  function productAddPlatformClicked(id) {
+    var dialog = bootbox
+      .dialog({
+        message:
+          '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+        closeButton: false,
+      })
+      .on("shown.bs.modal", function () {
+        var url = "{{ url_for('main.platforms_data_short_display') }}";
+        $.ajax({
+          url: url,
+          success: function (data) {
+            if (data.status) {
+              dialog.modal("hide");
+              let platforms = data.data;
+              platforms.unshift({ value: "", text: "Choose one..." });
+              bootbox.prompt({
+                title: "Please select a platform",
+                inputType: "select",
+                inputOptions: platforms,
+                callback: function (result) {
+                  if (result) {
+                    let product_post = +id;
+                    let platform_post = +result;
+                    var _dialog = bootbox
+                      .dialog({
+                        message:
+                          '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+                        closeButton: false,
+                      })
+                      .on("shown.bs.modal", function () {
+                        var url = "{{ url_for('main.product_add_platform') }}";
+                        $.ajax({
+                          url: url,
+                          type: "POST",
+                          dataType: "json",
+                          contentType: "application/json; charset=utf-8",
+                          data: JSON.stringify({
+                            product: product_post,
+                            platform: platform_post,
+                          }),
+                          success: function (response) {
+                            $("#products_data").DataTable().ajax.reload();
+                            bootbox.alert(
+                              response.message.toString(),
+                              function () {
+                                _dialog.modal("hide");
+                              }
+                            );
+                          },
+                          error: function (jqXHR, textStatus, errorThrown) {
+                            bootbox.alert(errorThrown.toString(), function () {
+                              _dialog.modal("hide");
+                            });
+                          },
+                        });
+                      });
+                  }
+                },
+              });
+            } else {
+              bootbox.alert(data.message.toString(), function () {
+                dialog.modal("hide");
+              });
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            bootbox.alert(errorThrown.toString(), function () {
+              dialog.modal("hide");
+            });
+          },
+        });
+      });
+  }
+  // a button for adding platform to product clicked -- end
+
+  // ##########   a button for removing platform from product clicked -- start
+  function productDelPlatformClicked(data) {
+    const substr = data.split("_str_");
+    let product = +substr[1];
+    let platform = substr[0];
+    bootbox.confirm({
+      message:
+        "Do you really want to remove <i class='font-weight-bold text-info'>" +
+        platform +
+        "</i> from this product?",
+      buttons: {
+        confirm: {
+          label: '<i class="fa fa-check"></i> Yes',
+          className: "btn-success",
+        },
+        cancel: {
+          label: '<i class="fa fa-times"></i> No',
+          className: "btn-danger",
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          var dialog = bootbox
+            .dialog({
+              message:
+                '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+              closeButton: false,
+            })
+            .on("shown.bs.modal", function () {
+              var url = "{{ url_for('main.product_delete_platform') }}";
+              $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                  product: product,
+                  platform: platform,
+                }),
+                success: function (data) {
+                  $("#products_data").DataTable().ajax.reload();
+                  bootbox.alert(data.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  bootbox.alert(errorThrown.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+              });
+            });
+        }
+      },
+    });
+  }
+  // ##########   a button for removing platform from product clicked -- end
+
+  // ###### Add factor - START
+  $(function () {
+    $("#addFactor").validate({
+      rules: { product_name: { required: true } },
+      messages: {},
+
+      submitHandler: function () {
+        var dialog = bootbox
+          .dialog({
+            message:
+              '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+            closeButton: false,
+          })
+          .on("shown.bs.modal", function () {
+            var url = "{{ url_for('main.add_factors') }}";
+            var formdata = $("#addFactor").serialize();
+            $.ajax({
+              url: url,
+              type: "POST",
+              data: formdata,
+              dataType: "JSON",
+              success: function (data) {
+                if (data.status) {
+                  $("#addFactorCollapse").collapse("hide");
+                  $("#addFactor")[0].reset();
+                  $("#factors_data").DataTable().ajax.reload();
+                  bootbox.alert(data.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                } else {
+                  bootbox.alert(data.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                }
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                bootbox.alert(errorThrown.toString(), function () {
+                  dialog.modal("hide");
+                });
+              },
+            });
+          });
+      },
+    });
+  });
+  // ###### Add factor - END
+
+  // ###### Delete factor - START
+  function deleteFactorClicked(id) {
+    bootbox.confirm({
+      message: "Do you really want to remove this entry?",
+      buttons: {
+        confirm: {
+          label: '<i class="fa fa-check"></i> Yes',
+          className: "btn-success",
+        },
+        cancel: {
+          label: '<i class="fa fa-times"></i> No',
+          className: "btn-danger",
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          var dialog = bootbox
+            .dialog({
+              message:
+                '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+              closeButton: false,
+            })
+            .on("shown.bs.modal", function () {
+              var url = "{{ url_for('main.delete_factor') }}";
+              $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "JSON",
+                data: { id: id },
+                success: function (data) {
+                  $("#factors_data").DataTable().ajax.reload();
+                  $("#sentiments_data").DataTable().ajax.reload();
+                  bootbox.alert(data.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  bootbox.alert(errorThrown.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+              });
+            });
+        }
+      },
+    });
+  }
+  // ###### Delete factor - END
+
+  // a button for adding product to factor clicked -- start
+  function factorAddProductClicked(id) {
+    var dialog = bootbox
+      .dialog({
+        message:
+          '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+        closeButton: false,
+      })
+      .on("shown.bs.modal", function () {
+        $.ajax({
+          url: "{{ url_for('main.products_data_short_display') }}",
+          success: function (data) {
+            if (data.status) {
+              dialog.modal("hide");
+              let products = data.data;
+              products.unshift({ value: "", text: "Choose one..." });
+              bootbox.prompt({
+                title: "Please select a product",
+                inputType: "select",
+                inputOptions: products,
+                callback: function (result) {
+                  if (result) {
+                    let factor_post = +id;
+                    let product_post = +result;
+                    var _dialog = bootbox
+                      .dialog({
+                        message:
+                          '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+                        closeButton: false,
+                      })
+                      .on("shown.bs.modal", function () {
+                        $.ajax({
+                          url: "{{ url_for('main.factor_add_product') }}",
+                          type: "POST",
+                          dataType: "json",
+                          contentType: "application/json; charset=utf-8",
+                          data: JSON.stringify({
+                            factor: factor_post,
+                            product: product_post,
+                          }),
+                          success: function (response) {
+                            $("#factors_data").DataTable().ajax.reload();
+                            bootbox.alert(
+                              response.message.toString(),
+                              function () {
+                                _dialog.modal("hide");
+                              }
+                            );
+                          },
+                          error: function (jqXHR, textStatus, errorThrown) {
+                            bootbox.alert(errorThrown.toString(), function () {
+                              _dialog.modal("hide");
+                            });
+                          },
+                        });
+                      });
+                  }
+                },
+              });
+            } else {
+              bootbox.alert(data.message.toString(), function () {
+                dialog.modal("hide");
+              });
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            bootbox.alert(errorThrown.toString(), function () {
+              dialog.modal("hide");
+            });
+          },
+        });
+      });
+  }
+  // a button for adding product to factor clicked -- end
+
+  // ##########   a button for removing product from factor clicked -- start
+  function factorDelProductClicked(data) {
+    const substr = data.split("_str_");
+    let factor = +substr[1];
+    let product = substr[0];
+    bootbox.confirm({
+      message:
+        "Do you really want to remove <i class='font-weight-bold text-info'>" +
+        product +
+        "</i> from this factor?",
+      buttons: {
+        confirm: {
+          label: '<i class="fa fa-check"></i> Yes',
+          className: "btn-success",
+        },
+        cancel: {
+          label: '<i class="fa fa-times"></i> No',
+          className: "btn-danger",
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          var dialog = bootbox
+            .dialog({
+              message:
+                '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+              closeButton: false,
+            })
+            .on("shown.bs.modal", function () {
+              $.ajax({
+                url: "{{ url_for('main.factor_delete_product') }}",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                  factor: factor,
+                  product: product,
+                }),
+                success: function (data) {
+                  $("#factors_data").DataTable().ajax.reload();
+                  bootbox.alert(data.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  bootbox.alert(errorThrown.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+              });
+            });
+        }
+      },
+    });
+  }
+  // ##########   a button for removing product from factor clicked -- end
+
+  // ###### Import Sentiments - START
+  $.validator.addMethod(
+    "filesize",
+    function (value, element, param) {
+      return this.optional(element) || element.files[0].size <= param;
+    },
+    "File size must be less than {0}"
+  );
+  $(function () {
+    $("#addSentiments").validate({
+      rules: {
+        document: {
+          required: true,
+          extension: "xls|xlsx|csv",
+          filesize: 4194304,
+        },
+      },
+      messages: {
+        document: {
+          required: "This input is required",
+          extension: "File must be XLS or XLSX or CSV document",
+          filesize: "File must be less than 4MB",
+        },
+      },
+
+      submitHandler: function () {
+        var dialog = bootbox
+          .dialog({
+            message:
+              '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Please wait while we do something...</div>',
+            closeButton: false,
+          })
+          .on("shown.bs.modal", function () {
+            var form = $("#addSentiments")[0];
+            var data = new FormData(form);
+            // data.append("CustomField", "This is some extra data, testing");
+            $.ajax({
+              type: "POST",
+              enctype: "multipart/form-data",
+              url: "{{ url_for('main.import_sentiments') }}",
+              data: data,
+              processData: false,
+              contentType: false,
+              cache: false,
+              success: function (data) {
+                extra_data = "";
+                extra_string = "---------------------------------------";
+                if (data.extra) {
+                  extra_data = data.extra;
+                  extra_string = "<ol>";
+                  $.each(extra_data, function (key, value) {
+                    extra_string += "<li>" + value + "</li>";
+                  });
+                  extra_string += "</ol>";
+                }
+
+                if (data.status) {
+                  $("#addSentimentsCollapse").collapse("hide");
+                  $("#addSentiments")[0].reset();
+                  $("#sentiments_data").DataTable().ajax.reload();
+                  bootbox.alert(
+                    "RESULTS" + data.message.toString() + extra_string,
+                    function () {
+                      dialog.modal("hide");
+                    }
+                  );
+                } else {
+                  bootbox.alert(
+                    "RESULTS" + data.message.toString() + extra_string,
+                    function () {
+                      dialog.modal("hide");
+                    }
+                  );
+                }
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                bootbox.alert(errorThrown.toString(), function () {
+                  dialog.modal("hide");
+                });
+              },
+            });
+          });
+      },
+    });
+  });
+  // ###### Import Sentiments - END
+
+  // ###### Delete sentiment - START
+  function deleteSentimentClicked(id) {
+    bootbox.confirm({
+      message: "Do you really want to remove this entry?",
+      buttons: {
+        confirm: {
+          label: '<i class="fa fa-check"></i> Yes',
+          className: "btn-success",
+        },
+        cancel: {
+          label: '<i class="fa fa-times"></i> No',
+          className: "btn-danger",
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          var dialog = bootbox
+            .dialog({
+              message:
+                '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Please wait while we do something...</div>',
+              closeButton: false,
+            })
+            .on("shown.bs.modal", function () {
+              $.ajax({
+                url: "{{ url_for('main.delete_sentiment') }}",
+                type: "POST",
+                dataType: "JSON",
+                data: { id: id },
+                success: function (data) {
+                  $("#sentiments_data").DataTable().ajax.reload();
+                  bootbox.alert(data.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  bootbox.alert(errorThrown.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+              });
+            });
+        }
+      },
+    });
+  }
+  // ###### Delete sentiment - END
+  //
 </script>
 {% endblock %}

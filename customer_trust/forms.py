@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm, RecaptchaField
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import (StringField, TextAreaField, PasswordField,
                      IntegerField, BooleanField, RadioField, SubmitField)
 from wtforms.validators import InputRequired, Length, Email, Regexp
@@ -46,3 +47,23 @@ class AddPlatformForm(FlaskForm):
     platform_description = TextAreaField(
         'Platform Descriptions', validators=[InputRequired(), Length(max=200)])
     submit = SubmitField('Submit')
+
+
+class AddProductForm(FlaskForm):
+    product_name = StringField('Product Name', validators=[InputRequired()])
+    product_description = TextAreaField(
+        'Product Descriptions', validators=[InputRequired(), Length(max=200)])
+    submit = SubmitField('Submit')
+
+
+class AddFactorForm(FlaskForm):
+    factor_name = StringField('Factor Name', validators=[InputRequired()])
+    factor_description = TextAreaField(
+        'Factor Descriptions', validators=[InputRequired(), Length(max=200)])
+    submit = SubmitField('Submit')
+
+
+class ImportSentimentsForm(FlaskForm):
+    document = FileField('Sentiments File', validators=[FileRequired(message='Please attach a file'), FileAllowed(
+        upload_set=['xls', 'xlsx', 'csv'], message='Excel and CSV Documents only!')])
+    submit = SubmitField('Submit', render_kw={"value": "Import Data"})

@@ -35,18 +35,28 @@
 
     <!-- <link
       rel="stylesheet"
-      href="{{ url_for('static', filename= 'css/font-awesome.min.css') }}"
+      href="{{ url_for('static', filename= 'css/font-awesome/all.min.css') }}"
     /> -->
-
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+      integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
+
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    /> -->
     {% endblock %}
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg sticky-top navbar-light container">
+    <nav
+      class="navbar navbar-expand-lg sticky-top navbar-light container"
+      style="background-color: white"
+    >
       <a class="navbar-brand" href="{{ url_for('main.index') }}">
         <h3>TRUST PORTAL</h3>
       </a>
@@ -131,6 +141,7 @@
 
     <!-- jquery validate library -->
     <script src="{{ url_for('static', filename= 'js/jquery.validate.js') }}"></script>
+    <script src="{{ url_for('static', filename= 'js/jquery.validate.additional-methods.min.js') }}"></script>
 
     <!-- Bootbox library -->
     <script src="{{ url_for('static', filename= 'js/bootbox.min.js') }}"></script>

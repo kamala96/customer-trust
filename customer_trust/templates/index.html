@@ -9,13 +9,9 @@
 <div class="page">
   <!---Containerize paragraph and form for styling--->
   <div class="container">
-    {% if current_user.is_authenticated%}
-    <div class="alert alert-success" role="alert">
-      <h4>AVAILABLE SACCOS</h4>
-    </div>
-
-    {% with messages = get_flashed_messages(with_categories=True) %} {% if
-    messages %} {% for category, message in messages %}
+    {% if current_user.is_authenticated%} {% with messages =
+    get_flashed_messages(with_categories=True) %} {% if messages %} {% for
+    category, message in messages %}
     <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
     {% endfor %} {% endif %} {% endwith %}
     <!-- List Start -->
