@@ -3,60 +3,551 @@
   rel="stylesheet"
   href="{{ url_for('static', filename= 'css/extended_beauty.css') }}"
 />
+<style>
+  /* Hide all steps by default: */
+  .tab {
+    display: none;
+  }
+
+  /* Hide all search bars by default: */
+  #filterfactorArea,
+  #filterproductArea {
+    display: none;
+  }
+
+  /* button {
+    background-color: #04aa6d;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 17px;
+    font-family: Raleway;
+    cursor: pointer;
+  } */
+
+  button:hover {
+    opacity: 0.8;
+  }
+
+  #prevBtn {
+    background-color: #bbbbbb;
+  }
+
+  /* Make circles that indicate the steps of the form: */
+  .step {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #4285f4;
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+  }
+
+  .step.active {
+    opacity: 1;
+  }
+</style>
 {% endblock %} {% block content %}
 
 <!---Containerize main page for styling--->
 <div class="page">
   <!---Containerize paragraph and form for styling--->
   <div class="container">
-    {% if current_user.is_authenticated%} {% with messages =
-    get_flashed_messages(with_categories=True) %} {% if messages %} {% for
-    category, message in messages %}
+    {% with messages = get_flashed_messages(with_categories=True) %} {% if
+    messages %} {% for category, message in messages %}
     <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
     {% endfor %} {% endif %} {% endwith %}
     <!-- List Start -->
     <div class="card mb-2">
-      <div class="card-header container-fluid">
-        <div class="row">
-          <div class="col-md-10">
-            <!-- <h6 style="text-transform:uppercase;">STORES</h6> -->
-          </div>
-          <div class="col-md-2 float-right">
-            <button
-              class="btn btn-sm btn-primary float-right"
-              data-toggle="collapse"
-              data-target="#addSaccossCollapse"
-            >
-              <span data-feather="plus-circle"></span> Add New
-            </button>
-          </div>
-        </div>
-      </div>
       <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-sm" id="dataTable">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Current Name</th>
-                <th>Initial Name</th>
-                <th>Members</th>
-                <th>Date Started</th>
-                <th>District</th>
-                <th>Region</th>
-                <th>Model Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+        <form id="trustGenerateForm" method="post" action="javascript:void(0);">
+          <!-- <h4 style="text-transform: uppercase; text-align: center">
+            Trust Recommender
+          </h4> -->
+
+          <div id="control-bar" class="row">
+            <div class="col-lg-8 col-md-8 col-sm-12">
+              <div style="overflow: auto">
+                <!-- Circles which indicates the steps of the form: -->
+                <div style="text-align: center" id="all-steps">
+                  <span class="step"></span>
+                  <span class="step"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-12">
+              <div
+                id="submitDiv"
+                style="float: right"
+                class="mb-2"
+                style="display: none"
+              >
+                <button
+                  type="submit"
+                  id="submitBtn"
+                  class="btn btn-primary ml-1"
+                >
+                  Submit
+                </button>
+              </div>
+              <div style="float: right" class="mb-2">
+                <button
+                  type="button"
+                  id="prevBtn"
+                  class="btn btn-primary"
+                  onclick="nextPrev(-1)"
+                >
+                  Previous
+                </button>
+                <button
+                  type="button"
+                  id="nextBtn"
+                  class="btn btn-primary"
+                  onclick="nextPrev(1)"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {% if products is defined and products %}
+          <div id="filter-inputs">
+            <div id="filterproductArea" class="mb-1">
+              <input
+                type="text"
+                class="form-control"
+                id="filterproductsString"
+                placeholder="Enter any keyword to filter a list of products"
+              />
+            </div>
+            {% endif %}{% if factors is defined and factors %}
+            <div id="filterfactorArea" class="mb-1">
+              <input
+                type="text"
+                class="form-control"
+                id="filterfactorsString"
+                placeholder="Enter any keyword to filter a list of trust factors"
+              />
+            </div>
+          </div>
+          {% endif %}
+
+          <div
+            id="productsDiv"
+            class="list-group tab products-checkbox-group required"
+          >
+            {% if products is defined and products %} {% for product in products
+            %}
+            <li class="list-group-item">
+              <span class="ml-2">
+                <input
+                  class="form-check-input product-list"
+                  type="checkbox"
+                  name="product"
+                  value="{{ product.product_id }}"
+                  id="{{ product.product_slug }}"
+                />
+                <label class="form-check-label" for="{{ product.product_slug }}"
+                  >{{ product.product_name }}
+                  <span>
+                    <i hidden>{{ product.product_keywords }}</i>
+                  </span>
+                </label>
+              </span>
+            </li>
+            {% endfor %} {% else %}
+            <li class="list-group-item">No product added yet!</li>
+            {% endif %}
+          </div>
+
+          <div
+            id="factorsDiv"
+            class="list-group tab factors-checkbox-group required"
+          >
+            {% if factors is defined and factors %} {% for factor in factors %}
+            <li class="list-group-item">
+              <span class="ml-2">
+                <input
+                  class="form-check-input factor-list"
+                  type="checkbox"
+                  name="factor"
+                  value="{{ factor.factor_id }}"
+                  id="{{ factor.factor_slug }}"
+                />
+                <label class="form-check-label" for="{{ factor.factor_slug }}"
+                  >{{ factor.factor_name }}
+                  <span style="display: none">
+                    <i hidden>{{ factor.factor_keywords }}</i>
+                  </span>
+                </label>
+              </span>
+            </li>
+            {% endfor %} {% else %}
+            <li class="list-group-item">No factor defined yet!</li>
+            {% endif %}
+          </div>
+        </form>
+        <div id="resultsBar" class="mt-2" style="display: none">
+          <canvas
+            id="trustChart"
+            class="mb-4"
+            style="width: 100%; max-width: 900px"
+          ></canvas>
+          <canvas
+            id="contributorsChart"
+            style="width: 100%; max-width: 900px"
+          ></canvas>
         </div>
       </div>
     </div>
-    {% endif %} {% if not current_user.is_authenticated%}
-    <p>Unlock your account</p>
-    {% endif %}
   </div>
 </div>
+
+{% endblock %}{% block scripts %}
+<script src="{{ url_for('static', filename= 'js/Chart.js') }}"></script>
+
+<script type="text/javascript">
+  // #####################################################################
+  // MULTI_STEP FORM LOGIC - START
+  // #####################################################################
+  $(".factor-list").on("change", function () {
+    $(".factor-list").not(this).prop("checked", false);
+  });
+
+  $(".product-list").on("change", function () {
+    $(".product-list").not(this).prop("checked", false);
+  });
+
+  var currentTab = 0; // Current tab is set to be the first tab (0)
+  showTab(currentTab); // Display the current tab
+
+  function showTab(n) {
+    // This function will display the specified tab of the form...
+    var x = document.getElementsByClassName("tab");
+    x[n].style.display = "block";
+    //... and fix the Previous/Next buttons:
+    if (n == 0) {
+      document.getElementById("prevBtn").style.display = "none";
+      document.getElementById("filterfactorArea").style.display = "none";
+      document.getElementById("filterproductArea").style.display = "block";
+      console.log(n);
+    } else {
+      document.getElementById("prevBtn").style.display = "inline";
+      document.getElementById("filterfactorArea").style.display = "block";
+      document.getElementById("filterproductArea").style.display = "none";
+    }
+    if (n == x.length - 1) {
+      document.getElementById("nextBtn").innerHTML = "Submit";
+      // document.getElementsById("nextBtn")[0].type = "submit";
+      // $("#nextBtn").prop("type", "submit");
+      document.getElementById("nextBtn").style.display = "none";
+      document.getElementById("submitDiv").style.display = "block";
+    } else {
+      document.getElementById("nextBtn").innerHTML = "Next";
+      document.getElementById("nextBtn").style.display = "block";
+      document.getElementById("submitDiv").style.display = "none";
+    }
+    //... and run a function that will display the correct step indicator:
+    fixStepIndicator(n);
+  }
+
+  function nextPrev(n) {
+    // This function will figure out which tab to display
+    var x = document.getElementsByClassName("tab");
+    // Exit the function if any field in the current tab is invalid:
+    if (n == 1 && !validateForm()) return false;
+    // Hide the current tab:
+    x[currentTab].style.display = "none";
+    // Increase or decrease the current tab by 1:
+    currentTab = currentTab + n;
+    // if you have reached the end of the form...
+    if (currentTab >= x.length) {
+      // ... the form gets submitted:
+      // document.getElementById("regForm").submit();
+      // return true;
+
+      document.getElementById("control-bar").style.display = "none";
+      document.getElementById("filter-inputs").style.display = "none";
+      document.getElementById("resultsBar").style.display = "block";
+      // document.getElementById("prevBtn").style.display = "none";
+      // document.getElementById("nextBtn").style.display = "none";
+      // document.getElementById("all-steps").style.display = "none";
+      // document.getElementById("filterfactorArea").style.display = "none";
+      // document.getElementById("filterproductArea").style.display = "none";
+    }
+    // Otherwise, display the correct tab:
+    showTab(currentTab);
+  }
+
+  function validateForm() {
+    // This function deals with validation of the form fields
+    var x,
+      y,
+      i,
+      valid = true;
+    x = document.getElementsByClassName("tab");
+    y = x[currentTab].getElementsByTagName("input");
+    // A loop that checks every input field in the current tab:
+    for (i = 0; i < y.length; i++) {
+      // If a field is empty...
+      if (y[i].value == "") {
+        // add an "invalid" class to the field:
+        y[i].className += " invalid";
+        // and set the current valid status to false
+        valid = false;
+      }
+    }
+    // If the valid status is true, mark the step as finished and valid:
+    if (valid) {
+      document.getElementsByClassName("step")[currentTab].className +=
+        " finish";
+    }
+    return valid; // return the valid status
+  }
+
+  function fixStepIndicator(n) {
+    // This function removes the "active" class of all steps...
+    var i,
+      x = document.getElementsByClassName("step");
+    for (i = 0; i < x.length; i++) {
+      x[i].className = x[i].className.replace(" active", "");
+    }
+    //... and adds the "active" class on the current step:
+    x[n].className += " active";
+  }
+
+  // #####################################################################
+  // MULTI_STEP FORM LOGIC - END
+  // #####################################################################
+
+  // #####################################################################
+  // FILTER FACTORS & PRODUCTS LOGIC - START
+  // #####################################################################
+
+  jQuery("#filterfactorsString").keyup(function () {
+    var filter = jQuery(this).val();
+    jQuery("#factorsDiv li").each(function () {
+      if (jQuery(this).text().search(new RegExp(filter, "i")) < 0) {
+        jQuery(this).hide();
+      } else {
+        jQuery(this).show();
+      }
+    });
+  });
+
+  jQuery("#filterproductsString").keyup(function () {
+    var filter = jQuery(this).val();
+    jQuery("#productsDiv li").each(function () {
+      if (jQuery(this).text().search(new RegExp(filter, "i")) < 0) {
+        jQuery(this).hide();
+      } else {
+        jQuery(this).show();
+      }
+    });
+  });
+  // #####################################################################
+  // FILTER FACTORS & PRODUCTS LOGIC - END
+  // #####################################################################
+
+  // #####################################################################
+  // SUBMIT AND RETURN TRUST - START
+  // #####################################################################
+
+  $("#submitBtn").click(function (event) {
+    event.preventDefault();
+    $("#trustChart").remove();
+    $("#contributorsChart").remove();
+
+    $("#resultsBar").append(
+      '<canvas id="trustChart" class="mb-4" style="width: 100%; max-width: 900px"><canvas>'
+    );
+    $("#resultsBar").append(
+      '<canvas id="contributorsChart" style="width: 100%; max-width: 900px"><canvas>'
+    );
+
+    let is_product_checked =
+      $("div.products-checkbox-group.required :checkbox:checked").length > 0;
+    let is_factor_checked =
+      $("div.factors-checkbox-group.required :checkbox:checked").length > 0;
+
+    if (is_product_checked == false) {
+      bootbox.alert(
+        '<p class="text-danger">Oops!, Please select a product!</p>'
+      );
+    } else if (is_factor_checked == false) {
+      bootbox.alert(
+        '<p class="text-danger">Oops!, Please select a trust factor!</p>'
+      );
+    } else {
+      // let data = $("#trustGenerateForm").serialize();
+      // document.getElementById("resultsBar").style.display = "block";
+      // $("#resultsBar").html("Results here");
+
+      var dialog = bootbox
+        .dialog({
+          message:
+            '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Please wait...</div>',
+          closeButton: false,
+        })
+        .on("shown.bs.modal", function () {
+          let data = $("#trustGenerateForm").serialize();
+          $.ajax({
+            url: "{{ url_for('generator.generate_trust') }}",
+            type: "POST",
+            data: data,
+            dataType: "JSON",
+            success: function (response) {
+              if (response.status) {
+                document.getElementById("resultsBar").style.display = "block";
+                // $("#trustGenerateForm")[0].reset();
+                dialog.modal("hide");
+                const backgroundColorsStore = [
+                  "rgba(255, 99, 132, 0.2)",
+                  "rgba(255, 159, 64, 0.2)",
+                  "rgba(255, 205, 86, 0.2)",
+                  "rgba(75, 192, 192, 0.2)",
+                  "rgba(54, 162, 235, 0.2)",
+                  "rgba(153, 102, 255, 0.2)",
+                  "rgba(201, 203, 207, 0.2)",
+                ];
+                const borderColorsStore = [
+                  "rgb(255, 99, 132)",
+                  "rgb(255, 159, 64)",
+                  "rgb(255, 205, 86)",
+                  "rgb(75, 192, 192)",
+                  "rgb(54, 162, 235)",
+                  "rgb(153, 102, 255)",
+                  "rgb(201, 203, 207)",
+                ];
+                const pieColorsStore = [
+                  "#2b5797",
+                  "rgb(255, 205, 86)",
+                  "green",
+                  "#1e7145",
+                  "red",
+                  "#b91d47",
+                  "rgb(255, 99, 132)",
+                  "blue",
+                  "#e8c3b9",
+                  "orange",
+                  "#00aba9",
+                  "rgb(54, 162, 235)",
+                  "brown",
+                ];
+
+                let xValues = [];
+                let yValues = [];
+                let ypieValues = [];
+                let backgroundColors = [];
+                let pieColors = [];
+                let borderColors = [];
+
+                let response_data = response.data.data;
+
+                let factor = response.data.factor;
+                let product = response.data.product;
+
+                $.each(response_data, function (key, value) {
+                  let randombackgroundColor = Math.floor(
+                    Math.random() * backgroundColorsStore.length
+                  );
+                  let randomborderColor = Math.floor(
+                    Math.random() * borderColorsStore.length
+                  );
+                  let randompieColor = Math.floor(
+                    Math.random() * pieColorsStore.length
+                  );
+
+                  xValues.push(value.platform);
+
+                  yValues.push(value.total);
+                  ypieValues.push(value.count);
+
+                  backgroundColors.push(
+                    backgroundColorsStore[randombackgroundColor]
+                  );
+                  borderColors.push(borderColorsStore[randomborderColor]);
+                  pieColors.push(pieColorsStore[randompieColor]);
+                });
+
+                var trustChart = new Chart("trustChart", {
+                  type: "horizontalBar",
+                  data: {
+                    labels: xValues,
+                    datasets: [
+                      {
+                        axis: "y",
+                        label: "Trust Percentage",
+                        data: yValues,
+                        fill: false,
+                        backgroundColor: backgroundColors,
+                        borderColor: borderColors,
+                        borderWidth: 1,
+                      },
+                    ],
+                  },
+                  options: {
+                    // indexAxis: "y",
+                    legend: { display: false },
+                    responsive: true,
+                    title: {
+                      display: true,
+                      text: factor + " - " + product + " (Trust Percentages)",
+                    },
+                    scales: {
+                      xAxes: [{ ticks: { min: 0, max: 100 } }],
+                    },
+                  },
+                });
+
+                var contributorsChart = new Chart("contributorsChart", {
+                  type: "doughnut",
+                  data: {
+                    labels: xValues,
+                    datasets: [
+                      {
+                        backgroundColor: pieColors,
+                        data: ypieValues,
+                        hoverOffset: 4,
+                      },
+                    ],
+                  },
+                  options: {
+                    title: {
+                      display: true,
+                      text: factor + " - " + product + " (Total Comments)",
+                    },
+                  },
+                });
+              } else {
+                if (response.message == "login_required") {
+                  dialog.modal("hide");
+                  login_url = "{{ url_for('auth.login') }}";
+                  window.location.replace(response.url);
+                } else {
+                  bootbox.alert(response.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                }
+              }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              bootbox.alert(errorThrown.toString(), function () {
+                dialog.modal("hide");
+              });
+            },
+          });
+        });
+    }
+  });
+
+  // #####################################################################
+  // SUBMIT AND RETURN TRUST - END
+  // #####################################################################
+</script>
 
 {% endblock %}

@@ -67,3 +67,10 @@ class ImportSentimentsForm(FlaskForm):
     document = FileField('Sentiments File', validators=[FileRequired(message='Please attach a file'), FileAllowed(
         upload_set=['xls', 'xlsx', 'csv'], message='Excel and CSV Documents only!')])
     submit = SubmitField('Submit', render_kw={"value": "Import Data"})
+
+
+class GneratorForm(FlaskForm):
+    product = IntegerField('Product', validators=[InputRequired(
+        message="Make sure you have submitted a valid entry")])
+    factor = IntegerField('Trust Factor', validators=[InputRequired(
+        message="Make sure you have submitted a valid entry")])

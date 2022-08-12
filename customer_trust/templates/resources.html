@@ -210,9 +210,8 @@
                 <thead>
                   <tr>
                     <th>Name</th>
-                    <th>Descriptions</th>
                     <th>Active Platforms</th>
-                    <th>Date Added</th>
+                    <th>Search Keywords</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -314,9 +313,8 @@
                 <thead>
                   <tr>
                     <th>Name</th>
-                    <th>Descriptions</th>
                     <th>Active Products</th>
-                    <th>Date Added</th>
+                    <th>Search Keywords</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -412,6 +410,7 @@
                     <th>Trust Factor</th>
                     <th>Product</th>
                     <th>Platform</th>
+                    <th>Score</th>
                     <th>Date Added</th>
                     <th>Action</th>
                   </tr>
@@ -517,9 +516,8 @@
       serverSide: true,
       columns: [
         { data: "product_name" },
-        { data: "product_desc", orderable: false },
         { data: "product_platform", orderable: false },
-        { data: "date_created" },
+        { data: "product_keywords", orderable: false },
       ],
       pageLength: 5,
       dom: "Bfrtip",
@@ -528,42 +526,42 @@
           extend: "copy",
           title: products_title,
           exportOptions: {
-            columns: [0, 1, 2, 3],
+            columns: [0, 1, 2],
           },
         },
         {
           extend: "csv",
           title: products_title,
           exportOptions: {
-            columns: [0, 1, 2, 3],
+            columns: [0, 1, 2],
           },
         },
         {
           extend: "excel",
           title: products_title,
           exportOptions: {
-            columns: [0, 1, 2, 3],
+            columns: [0, 1, 2],
           },
         },
         {
           extend: "pdf",
           title: products_title,
           exportOptions: {
-            columns: [0, 1, 2, 3],
+            columns: [0, 1, 2],
           },
         },
         {
           extend: "print",
           title: products_title,
           exportOptions: {
-            columns: [0, 1, 2, 3],
+            columns: [0, 1, 2],
           },
         },
       ],
 
       columnDefs: [
         {
-          targets: 2,
+          targets: 1,
           data: null,
           render: function (data, type, row) {
             let addBtn =
@@ -581,7 +579,7 @@
                 delBtn +=
                   "<button onclick=\"productDelPlatformClicked('" +
                   param +
-                  '\')" type="button" class="btn btn-outline-danger btn-sm mr-1" title="Remove Platform"> <i class="fas fa-minus-circle"></i> ' +
+                  '\')" type="button" class="btn btn-outline-danger btn-sm mr-1 mb-1" title="Remove Platform"> <i class="fas fa-minus-circle"></i> ' +
                   substr[i] +
                   "</button>";
               }
@@ -592,14 +590,43 @@
           },
         },
         {
-          targets: 4,
+          targets: 2,
+          data: null,
+          render: function (data, type, row) {
+            let addBtn =
+              '<button onclick="productAddKeywordClicked(' +
+              row["product_id"] +
+              ')" type="button" class="btn btn-primary btn-sm" title="Add Keyword"><i class="fas fa-plus-circle"></i></button>';
+            if (row["product_keywords"]) {
+              let plt = row["product_keywords"];
+              const substr = plt.split("**");
+              let delBtn = "";
+              for (let i = 0; i < substr.length; ++i) {
+                let param1 = substr[i];
+                let param2 = row["product_id"];
+                let param = param1.concat("_str_", param2);
+                delBtn +=
+                  "<button onclick=\"productDelKeywordClicked('" +
+                  param +
+                  '\')" type="button" class="btn btn-outline-danger btn-sm mr-1 mb-1" title="Remove Keyword"> <i class="fas fa-minus-circle"></i> ' +
+                  substr[i] +
+                  "</button>";
+              }
+              return delBtn + "| " + addBtn;
+            } else {
+              return addBtn;
+            }
+          },
+        },
+        {
+          targets: 3,
           data: null,
           orderable: false,
           render: function (data, type, row) {
             return (
               '<button onclick="deleteProductClicked(' +
               row["product_id"] +
-              ')" type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>  Delete</button>'
+              ')" type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>'
             );
           },
         },
@@ -616,9 +643,8 @@
       serverSide: true,
       columns: [
         { data: "factor_name" },
-        { data: "factor_desc", orderable: false },
         { data: "factor_products", orderable: false },
-        { data: "date_created" },
+        { data: "factor_keywords", orderable: false },
       ],
       pageLength: 5,
       dom: "Bfrtip",
@@ -627,42 +653,42 @@
           extend: "copy",
           title: factors_title,
           exportOptions: {
-            columns: [0, 1, 2, 3],
+            columns: [0, 1, 2],
           },
         },
         {
           extend: "csv",
           title: factors_title,
           exportOptions: {
-            columns: [0, 1, 2, 3],
+            columns: [0, 1, 2],
           },
         },
         {
           extend: "excel",
           title: factors_title,
           exportOptions: {
-            columns: [0, 1, 2, 3],
+            columns: [0, 1, 2],
           },
         },
         {
           extend: "pdf",
           title: factors_title,
           exportOptions: {
-            columns: [0, 1, 2, 3],
+            columns: [0, 1, 2],
           },
         },
         {
           extend: "print",
           title: factors_title,
           exportOptions: {
-            columns: [0, 1, 2, 3],
+            columns: [0, 1, 2],
           },
         },
       ],
 
       columnDefs: [
         {
-          targets: 2,
+          targets: 1,
           data: null,
           render: function (data, type, row) {
             let addBtn =
@@ -680,7 +706,7 @@
                 delBtn +=
                   "<button onclick=\"factorDelProductClicked('" +
                   param +
-                  '\')" type="button" class="btn btn-outline-danger btn-sm mr-1" title="Remove Product"> <i class="fas fa-minus-circle"></i> ' +
+                  '\')" type="button" class="btn btn-outline-danger btn-sm mr-1 mb-1" title="Remove Product"> <i class="fas fa-minus-circle"></i> ' +
                   substr[i] +
                   "</button>";
               }
@@ -691,14 +717,43 @@
           },
         },
         {
-          targets: 4,
+          targets: 2,
+          data: null,
+          render: function (data, type, row) {
+            let addBtn =
+              '<button onclick="factorAddKeywordClicked(' +
+              row["factor_id"] +
+              ')" type="button" class="btn btn-primary btn-sm" title="Add Keyword"><i class="fas fa-plus-circle"></i></button>';
+            if (row["factor_keywords"]) {
+              let prod = row["factor_keywords"];
+              const substr = prod.split("**");
+              let delBtn = "";
+              for (let i = 0; i < substr.length; ++i) {
+                let param1 = substr[i];
+                let param2 = row["factor_id"];
+                let param = param1.concat("_str_", param2);
+                delBtn +=
+                  "<button onclick=\"factorDelKeywordClicked('" +
+                  param +
+                  '\')" type="button" class="btn btn-outline-danger btn-sm mr-1 mb-1" title="Remove Keyword"> <i class="fas fa-minus-circle"></i> ' +
+                  substr[i] +
+                  "</button>";
+              }
+              return delBtn + "| " + addBtn;
+            } else {
+              return addBtn;
+            }
+          },
+        },
+        {
+          targets: 3,
           data: null,
           orderable: false,
           render: function (data, type, row) {
             return (
               '<button onclick="deleteFactorClicked(' +
               row["factor_id"] +
-              ')" type="button" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i>  Delete</button>'
+              ')" type="button" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></button>'
             );
           },
         },
@@ -718,6 +773,7 @@
         { data: "sentiment_factor" },
         { data: "sentiment_product" },
         { data: "sentiment_platform" },
+        { data: "sentiment_score" },
         { data: "date_created" },
       ],
       pageLength: 5,
@@ -727,49 +783,49 @@
           extend: "copy",
           title: sentiments_title,
           exportOptions: {
-            columns: [0, 1, 2, 3, 4],
+            columns: [0, 1, 2, 3, 4, 5],
           },
         },
         {
           extend: "csv",
           title: sentiments_title,
           exportOptions: {
-            columns: [0, 1, 2, 3, 4],
+            columns: [0, 1, 2, 3, 4, 5],
           },
         },
         {
           extend: "excel",
           title: sentiments_title,
           exportOptions: {
-            columns: [0, 1, 2, 3, 4],
+            columns: [0, 1, 2, 3, 4, 5],
           },
         },
         {
           extend: "pdf",
           title: sentiments_title,
           exportOptions: {
-            columns: [0, 1, 2, 3, 4],
+            columns: [0, 1, 2, 3, 4, 5],
           },
         },
         {
           extend: "print",
           title: sentiments_title,
           exportOptions: {
-            columns: [0, 1, 2, 3, 4],
+            columns: [0, 1, 2, 3, 4, 5],
           },
         },
       ],
 
       columnDefs: [
         {
-          targets: 5,
+          targets: 6,
           data: null,
           orderable: false,
           render: function (data, type, row) {
             return (
               '<button onclick="deleteSentimentClicked(' +
               row["sentiment_id"] +
-              ')" type="button" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i>  Delete</button>'
+              ')" type="button" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></button>'
             );
           },
         },
@@ -1053,6 +1109,51 @@
   }
   // a button for adding platform to product clicked -- end
 
+  // a button for adding keyword to product clicked -- start
+  function productAddKeywordClicked(id) {
+    bootbox.prompt({
+      title: "Please enter a keyword",
+      inputType: "text",
+      callback: function (result) {
+        if (result) {
+          let product_post = +id;
+          let keyword_post = result;
+          keyword_post = keyword_post.replace("**", "");
+          var _dialog = bootbox
+            .dialog({
+              message:
+                '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+              closeButton: false,
+            })
+            .on("shown.bs.modal", function () {
+              $.ajax({
+                url: "{{ url_for('main.product_add_keyword') }}",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                  product: product_post,
+                  keyword: keyword_post,
+                }),
+                success: function (response) {
+                  $("#products_data").DataTable().ajax.reload();
+                  bootbox.alert(response.message.toString(), function () {
+                    _dialog.modal("hide");
+                  });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  bootbox.alert(errorThrown.toString(), function () {
+                    _dialog.modal("hide");
+                  });
+                },
+              });
+            });
+        }
+      },
+    });
+  }
+  // a button for adding keyword to product clicked -- end
+
   // ##########   a button for removing platform from product clicked -- start
   function productDelPlatformClicked(data) {
     const substr = data.split("_str_");
@@ -1110,6 +1211,64 @@
     });
   }
   // ##########   a button for removing platform from product clicked -- end
+
+  // ##########   a button for removing keyword from product clicked -- start
+  function productDelKeywordClicked(data) {
+    const substr = data.split("_str_");
+    let product = +substr[1];
+    let my_keyword = substr[0];
+    bootbox.confirm({
+      message:
+        "Do you really want to remove <i class='font-weight-bold text-info'>" +
+        my_keyword +
+        "</i> from this product?",
+      buttons: {
+        confirm: {
+          label: '<i class="fa fa-check"></i> Yes',
+          className: "btn-success",
+        },
+        cancel: {
+          label: '<i class="fa fa-times"></i> No',
+          className: "btn-danger",
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          var dialog = bootbox
+            .dialog({
+              message:
+                '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+              closeButton: false,
+            })
+            .on("shown.bs.modal", function () {
+              var url = "{{ url_for('main.product_delete_keyword') }}";
+              $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                  product: product,
+                  keyword: my_keyword,
+                }),
+                success: function (data) {
+                  $("#products_data").DataTable().ajax.reload();
+                  bootbox.alert(data.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  bootbox.alert(errorThrown.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+              });
+            });
+        }
+      },
+    });
+  }
+  // ##########   a button for removing keyword from product clicked -- end
 
   // ###### Add factor - START
   $(function () {
@@ -1282,6 +1441,51 @@
   }
   // a button for adding product to factor clicked -- end
 
+  // a button for adding keyword to factor clicked -- start
+  function factorAddKeywordClicked(id) {
+    bootbox.prompt({
+      title: "Please enter a keyword",
+      inputType: "text",
+      callback: function (result) {
+        if (result) {
+          let factor_post = +id;
+          let keyword_post = result;
+          keyword_post = keyword_post.replace("**", "");
+          var _dialog = bootbox
+            .dialog({
+              message:
+                '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+              closeButton: false,
+            })
+            .on("shown.bs.modal", function () {
+              $.ajax({
+                url: "{{ url_for('main.factor_add_keyword') }}",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                  factor: factor_post,
+                  keyword: keyword_post,
+                }),
+                success: function (response) {
+                  $("#factors_data").DataTable().ajax.reload();
+                  bootbox.alert(response.message.toString(), function () {
+                    _dialog.modal("hide");
+                  });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  bootbox.alert(errorThrown.toString(), function () {
+                    _dialog.modal("hide");
+                  });
+                },
+              });
+            });
+        }
+      },
+    });
+  }
+  // a button for adding keyword to factor clicked -- end
+
   // ##########   a button for removing product from factor clicked -- start
   function factorDelProductClicked(data) {
     const substr = data.split("_str_");
@@ -1338,6 +1542,64 @@
     });
   }
   // ##########   a button for removing product from factor clicked -- end
+
+  // ##########   a button for removing keyword from factor clicked -- start
+  function factorDelKeywordClicked(data) {
+    const substr = data.split("_str_");
+    let factor = +substr[1];
+    let my_keyword = substr[0];
+    bootbox.confirm({
+      message:
+        "Do you really want to remove <i class='font-weight-bold text-info'>" +
+        my_keyword +
+        "</i> from this factor?",
+      buttons: {
+        confirm: {
+          label: '<i class="fa fa-check"></i> Yes',
+          className: "btn-success",
+        },
+        cancel: {
+          label: '<i class="fa fa-times"></i> No',
+          className: "btn-danger",
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          var dialog = bootbox
+            .dialog({
+              message:
+                '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>',
+              closeButton: false,
+            })
+            .on("shown.bs.modal", function () {
+              var url = "{{ url_for('main.factor_delete_keyword') }}";
+              $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                  factor: factor,
+                  keyword: my_keyword,
+                }),
+                success: function (data) {
+                  $("#factors_data").DataTable().ajax.reload();
+                  bootbox.alert(data.message.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  bootbox.alert(errorThrown.toString(), function () {
+                    dialog.modal("hide");
+                  });
+                },
+              });
+            });
+        }
+      },
+    });
+  }
+  // ##########   a button for removing keyword from factor clicked -- end
 
   // ###### Import Sentiments - START
   $.validator.addMethod(

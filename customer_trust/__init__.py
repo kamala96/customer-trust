@@ -42,6 +42,32 @@ def create_app():
     login_manager.init_app(app)
 
     from .models import User
+    from werkzeug.security import generate_password_hash
+
+    # Create a user to test with
+    @app.before_first_request
+    def create_user():
+        try:
+            db.create_all()
+            default_super_user = User.query.filter_by(
+                user_email='super@trust.com').first()
+
+            default_user = User.query.filter_by(
+                user_email='trust@trust.com').first()
+
+            if default_super_user is None:
+                super_admin = User(user_email='super@trust.com',
+                                   user_password=generate_password_hash('123456', method='sha256'), is_admin=1)
+                db.session.add(super_admin)
+                db.session.commit()
+
+            if default_user is None:
+                user = User(user_email='trust@trust.com',
+                            user_password=generate_password_hash('123456', method='sha256'))
+                db.session.add(user)
+                db.session.commit()
+        except:
+            pass
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -63,10 +89,7 @@ def create_app():
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
-    # from .generate_model import generate_model as generate_model_blueprint
-    # app.register_blueprint(generate_model_blueprint)
-
-    # from .reporting import reporting as reporting_blueprint
-    # app.register_blueprint(reporting_blueprint)
+    from .generator import generator as generator_blueprint
+    app.register_blueprint(generator_blueprint)
 
     return app

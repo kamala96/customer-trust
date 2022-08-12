@@ -60,6 +60,7 @@ class Ecommerce_products(db.Model, UserMixin):
     product_name = db.Column(db.String(100), unique=True, nullable=False)
     product_slug = db.Column(db.String(100), unique=True, nullable=False)
     product_desc = db.Column(db.Text)
+    product_keywords = db.Column(db.Text)
     product_platform = db.Column(db.Text)
     date_created = db.Column(
         db.DateTime, nullable=False, default=datetime.now)
@@ -76,7 +77,9 @@ class Ecommerce_products(db.Model, UserMixin):
         return {
             'product_id': self.product_id,
             'product_name': self.product_name,
+            'product_slug': self.product_slug,
             'product_desc': self.product_desc,
+            'product_keywords': self.product_keywords,
             'product_platform': self.product_platform,
             'date_created': self.date_created.strftime('%d %B, %Y %H:%M:%S'),
         }
@@ -93,6 +96,7 @@ class Trust_factors(db.Model, UserMixin):
     factor_name = db.Column(db.String(100), unique=True, nullable=False)
     factor_slug = db.Column(db.String(100), unique=True, nullable=False)
     factor_desc = db.Column(db.Text)
+    factor_keywords = db.Column(db.Text)
     factor_products = db.Column(db.Text)
     date_created = db.Column(
         db.DateTime, nullable=False, default=datetime.now)
@@ -109,7 +113,9 @@ class Trust_factors(db.Model, UserMixin):
         return {
             'factor_id': self.factor_id,
             'factor_name': self.factor_name,
+            'factor_slug': self.factor_slug,
             'factor_desc': self.factor_desc,
+            'factor_keywords': self.factor_keywords,
             'factor_products': self.factor_products,
             'date_created': self.date_created.strftime('%d %B, %Y %H:%M:%S'),
         }
@@ -117,7 +123,8 @@ class Trust_factors(db.Model, UserMixin):
 
 class Sentiments(db.Model, UserMixin):
     sentiment_id = db.Column(db.Integer, primary_key=True)
-    sentiment_text = db.Column(db.String(100), unique=True, nullable=False)
+    sentiment_text = db.Column(db.String(100), nullable=False)
+    sentiment_score = db.Column(db.Integer, nullable=False)
     sentiment_factor = db.Column(db.Integer, db.ForeignKey(
         'trust_factors.factor_id'), nullable=False)
     sentiment_product = db.Column(db.Integer, db.ForeignKey(
@@ -136,7 +143,8 @@ class Sentiments(db.Model, UserMixin):
     def to_dict(self):
         return {
             'sentiment_id': self.sentiment_id,
-            'sentiment_text': self.sentiment_text,
+            'sentiment_text': f'"{self.sentiment_text[:5]}..."',
+            'sentiment_score': self.sentiment_score,
             'sentiment_factor': self.sentiment_factor,
             'sentiment_product': self.sentiment_product,
             'sentiment_platform': self.sentiment_platform,

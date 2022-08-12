@@ -1,3 +1,8 @@
 sentiment,factor,product,platform
-Not reasonable,delivery_time,furniture,jumia
+not reasonable,delivery_time,furniture,jumia
 Reasonable,delivery_time,shoes,kikuu
+the price is actually fine,price,furniture,jumia
+"mmh, am not satisfied with ur prices",price,shoes,kikuu
+Reasonable,delivery_time,shoes,jumia
+the price is actuallyso so so fine,price,shoes,e-bay
+"they are very committed, they never lie",delivery_time,shoes,ali-express

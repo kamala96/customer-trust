@@ -1,8 +1,7 @@
-import json
 import os
-
 import pandas as pd
 from customer_trust.forms import AddFactorForm, AddPlatformForm, AddProductForm, DeleteIDForm, ImportSentimentsForm
+from customer_trust.generator import sentiment_scores
 from . import UPLOAD_FOLDER, db
 from flask import Blueprint, jsonify, render_template, request, g
 from flask_login import login_required
@@ -26,6 +25,14 @@ schema_add_plt_to_prod = {
         "platform": {"type": "number"},
     },
     'required': ['product', 'platform']
+}
+schema_addDel_keyword_to_prod = {
+    'type': 'object',
+    'properties': {
+        'product': {'type': 'number'},
+        "keyword": {"type": "string"},
+    },
+    'required': ['product', 'keyword']
 }
 schema_delete_plt_from_prod = {
     'type': 'object',
@@ -51,12 +58,29 @@ schema_delete_prod_from_factor = {
     },
     'required': ['factor', 'product']
 }
+schema_addDel_keyword_to_factor = {
+    'type': 'object',
+    'properties': {
+        'factor': {'type': 'number'},
+        "keyword": {"type": "string"},
+    },
+    'required': ['factor', 'keyword']
+}
 
 
 @main.route('/')
 def index():
     title = PORTAL_TITLE + ' - Home Page'
-    return render_template('index.html', title=title)
+    factors = Trust_factors.query.order_by(
+        Trust_factors.factor_name.asc()).all()
+    products = Ecommerce_products.query.order_by(
+        Ecommerce_products.product_name.asc()).all()
+    return render_template(
+        'index.html',
+        title=title,
+        factors=[factor.to_dict() for factor in factors],
+        products=[product.to_dict() for product in products],
+    )
 
 
 @main.route('/resources')
@@ -443,6 +467,52 @@ def product_add_platform():
         )
 
 
+@main.route('/api/products-data/add-keyword', methods=['POST'])
+@login_required
+@expects_json(schema_addDel_keyword_to_prod)
+def product_add_keyword():
+    try:
+        product = Ecommerce_products.query.get_or_404(g.data['product'])
+        keyword = g.data['keyword']
+
+        if not (product and keyword):
+            return jsonify(
+                status=False,
+                message='<p class="text-danger">Oops!, Invalid inputs</p>'
+            )
+        else:
+            current_keywords = product.product_keywords
+            new_keyword_input = keyword.lower()
+            new_keyword_input = new_keyword_input.replace('**', '')
+
+            if not current_keywords:
+                product.product_keywords = new_keyword_input
+                db.session.commit()
+                return jsonify(
+                    status=True,
+                    message='Congrats!, your changes has been saved successfully',
+                )
+            else:
+                if new_keyword_input not in current_keywords:
+                    product.product_keywords = new_keyword_input + '**' + current_keywords
+                    db.session.commit()
+                    return jsonify(
+                        status=True,
+                        message='Congrats!, your changes has been saved successfully',
+                        data=current_keywords
+                    )
+                else:
+                    return jsonify(
+                        status=False,
+                        message='<p class="text-danger"> Oops!, arleady exist </p>',
+                    )
+    except Exception as e:
+        return jsonify(
+            status=False,
+            message='<p class="text-danger">' + str(e) + '</p>'
+        )
+
+
 @main.route('/api/products-data/delete-platfrom', methods=['POST'])
 @login_required
 @expects_json(schema_delete_plt_from_prod)
@@ -484,6 +554,54 @@ def product_delete_platform():
                         status=True,
                         message='Success!, <i class="font-weight-bold text-success">' +
                         platform_to_remove + '</i> entry has been removed',
+                    )
+    except Exception as e:
+        return jsonify(
+            status=False,
+            message='<p class="text-danger">' + str(e) + '</p>'
+        )
+
+
+@main.route('/api/products-data/delete-keyword', methods=['POST'])
+@login_required
+@expects_json(schema_addDel_keyword_to_prod)
+def product_delete_keyword():
+    try:
+        product = Ecommerce_products.query.get_or_404(g.data['product'])
+        keyword = g.data['keyword']
+
+        if not (product and keyword):
+            return jsonify(
+                status=False,
+                message='<p class="text-danger">Oops!, Invalid inputs</p>'
+            )
+        else:
+            current_keywords = product.product_keywords
+            keyword_to_remove = keyword
+
+            if not current_keywords:
+                return jsonify(
+                    status=False,
+                    message='<p class="text-danger">Oops!, we gotta nothing to do.</p>',
+                )
+            else:
+                if keyword_to_remove not in current_keywords:
+                    return jsonify(
+                        status=False,
+                        message='<p class="text-danger">Oops!, we gotta nothing to do.</p>',
+                    )
+                else:
+                    new_keywords = current_keywords.replace(
+                        keyword_to_remove, '')
+                    new_keywords = new_keywords.replace('****', '**')
+                    new_keywords = new_keywords.lstrip('**')
+                    new_keywords = new_keywords.removesuffix('**')
+                    product.product_keywords = new_keywords
+                    db.session.commit()
+                    return jsonify(
+                        status=True,
+                        message='Success!, <i class="font-weight-bold text-success">' +
+                        keyword_to_remove + '</i> entry has been removed',
                     )
     except Exception as e:
         return jsonify(
@@ -666,6 +784,55 @@ def factor_add_product():
         )
 
 
+@main.route('/api/factors-data/add-keyword', methods=['GET', 'POST'])
+@login_required
+@expects_json(schema_addDel_keyword_to_factor)
+def factor_add_keyword():
+    try:
+        factor = Trust_factors.query.filter_by(
+            factor_id=g.data['factor']).first()
+        keyword = g.data['keyword']
+
+        if not (factor and keyword):
+            return jsonify(
+                status=False,
+                message='<p class="text-danger">Oops!, Invalid inputs</p>'
+            )
+        else:
+            current_keywords = factor.factor_keywords
+            new_keyword_input = keyword.lower()
+            new_keyword_input = new_keyword_input.replace('**', '')
+
+            if not current_keywords:
+                factor.factor_keywords = new_keyword_input
+                db.session.commit()
+                return jsonify(
+                    status=True,
+                    message='Success!, <i class="font-weight-bold text-success">' +
+                    new_keyword_input + '</i> entry has been saved',
+                )
+            else:
+                if new_keyword_input not in current_keywords:
+                    factor.factor_keywords = new_keyword_input + '**' + current_keywords
+                    db.session.commit()
+                    return jsonify(
+                        status=True,
+                        message='Success!, <i class="font-weight-bold text-success">' +
+                        new_keyword_input + '</i> entry has been saved',
+                    )
+                else:
+                    return jsonify(
+                        status=False,
+                        message='Oops!, <i class="font-weight-bold text-danger">' +
+                        new_keyword_input + '</i> entry arleady exist </p>',
+                    )
+    except Exception as e:
+        return jsonify(
+            status=False,
+            message='<p class="text-danger">' + str(e) + '</p>'
+        )
+
+
 @main.route('/api/factors-data/delete-product', methods=['POST'])
 @login_required
 @expects_json(schema_delete_prod_from_factor)
@@ -708,6 +875,55 @@ def factor_delete_product():
                         status=True,
                         message='Success!, <i class="font-weight-bold text-success">' +
                         product_to_remove + '</i> entry has been removed',
+                    )
+    except Exception as e:
+        return jsonify(
+            status=False,
+            message='<p class="text-danger">' + str(e) + '</p>'
+        )
+
+
+@main.route('/api/factors-data/delete-keyword', methods=['POST'])
+@login_required
+@expects_json(schema_addDel_keyword_to_factor)
+def factor_delete_keyword():
+    try:
+        factor = Trust_factors.query.filter_by(
+            factor_id=g.data['factor']).first()
+        keyword = g.data['keyword']
+
+        if not (factor and keyword):
+            return jsonify(
+                status=False,
+                message='<p class="text-danger">Oops!, Invalid inputs</p>'
+            )
+        else:
+            current_keywords = factor.factor_keywords
+            keyword_to_remove = keyword
+
+            if not current_keywords:
+                return jsonify(
+                    status=False,
+                    message='<p class="text-danger">Oops!, we gotta nothing to do.</p>',
+                )
+            else:
+                if keyword_to_remove not in current_keywords:
+                    return jsonify(
+                        status=False,
+                        message='<p class="text-danger">Oops!, we gotta nothing to do.</p>',
+                    )
+                else:
+                    new_keywords = current_keywords.replace(
+                        keyword_to_remove, '')
+                    new_keywords = new_keywords.replace('****', '**')
+                    new_keywords = new_keywords.lstrip('**')
+                    new_keywords = new_keywords.removesuffix('**')
+                    factor.factor_keywords = new_keywords
+                    db.session.commit()
+                    return jsonify(
+                        status=True,
+                        message='Success!, <i class="font-weight-bold text-success">' +
+                        keyword_to_remove + '</i> entry has been removed',
                     )
     except Exception as e:
         return jsonify(
@@ -775,7 +991,8 @@ def sentiments_data():
         'data': [
             {
                 'sentiment_id': row.sentiment_id,
-                'sentiment_text': row.sentiment_text,
+                'sentiment_text': f'{row.sentiment_text[:70]}',
+                'sentiment_score': 'Positive' if row.sentiment_score == 3 else ('Neutral' if row.sentiment_score == 2 else 'Negative'),
                 'sentiment_factor': row.factor.factor_name,
                 'sentiment_product': row.product.product_name,
                 'sentiment_platform': row.platform.platform_name,
@@ -796,6 +1013,9 @@ def parseFile(filePath):
         if set(col_names).issubset(fileData.columns):
             data_rows = []
             errors = []
+            # Add score column
+            fileData['score'] = fileData['sentiment'].apply(
+                lambda x: sentiment_scores(x))
             # Loop through the Rows
             for i, row in fileData.iterrows():
                 sentiment = row['sentiment']
@@ -832,7 +1052,7 @@ def parseFile(filePath):
                             str(i+1) + '</i>'
                         errors.append(error)
                     else:
-                        new_data = Sentiments(sentiment_text=row['sentiment'], sentiment_factor=check_factor.factor_id,
+                        new_data = Sentiments(sentiment_text=row['sentiment'], sentiment_score=row['score'], sentiment_factor=check_factor.factor_id,
                                               sentiment_product=check_product.product_id, sentiment_platform=check_platform.platform_id)
                         data_rows.append(new_data)
             if data_rows:
