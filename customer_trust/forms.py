@@ -1,7 +1,7 @@
-from flask_wtf import FlaskForm, RecaptchaField
+from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import (StringField, TextAreaField, PasswordField,
-                     IntegerField, BooleanField, RadioField, SubmitField)
+                     IntegerField, BooleanField, SubmitField)
 from wtforms.validators import InputRequired, Length, Email, Regexp
 
 
@@ -24,7 +24,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[
         InputRequired(), Length(min=6, max=8), Regexp('(?=.*?[0-9])', message='Password should contain at least one digit')], render_kw={"placeholder": "Password"})
     remember = BooleanField('Remember Me')
-    recaptcha = RecaptchaField()
+    # recaptcha = RecaptchaField()
     submit = SubmitField('Submit', render_kw={"value": "Ready To Go"})
 
 
@@ -33,7 +33,7 @@ class RegisterForm(FlaskForm):
         message='Please enter a valid email')], render_kw={"placeholder": "Email"})
     password = PasswordField('Password', validators=[
         InputRequired(), Length(min=6, max=8), Regexp('(?=.*?[0-9])', message='Password should contain at least one digit')], render_kw={"placeholder": "Password"})
-    recaptcha = RecaptchaField()
+    # recaptcha = RecaptchaField()
     submit = SubmitField('Submit', render_kw={"value": "Get Started"})
 
 

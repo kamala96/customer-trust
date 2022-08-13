@@ -3,6 +3,7 @@
  * Copyright 2011-2019 The Bootstrap Authors
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * default primary color code --- as downloaded: #8d448b
  */
 :root {
     --blue: #007bff;
@@ -11722,7 +11723,7 @@ a {
     -webkit-transition: .3s all ease;
     -o-transition: .3s all ease;
     transition: .3s all ease;
-    color: #8d448b;
+    color: #4285F4;
 }
 
 a:hover,
@@ -11731,7 +11732,7 @@ a:focus {
     outline: none !important;
     -webkit-box-shadow: none;
     box-shadow: none;
-    color: #8d448b;
+    color: #4285F4;
 }
 
 h1,
@@ -11751,7 +11752,7 @@ h5,
 }
 
 .bg-primary {
-    background: #8d448b !important;
+    background: #4285F4 !important;
 }
 
 .ftco-section {
@@ -11789,13 +11790,13 @@ h5,
 .login-wrap h3 {
     font-weight: 700;
     font-size: 20px;
-    color: #8d448b;
+    color: #4285F4;
 }
 
 .login-wrap .icon {
     width: 80px;
     height: 80px;
-    background: #8d448b;
+    background: #4285F4;
     border-radius: 50%;
     font-size: 30px;
     margin: 0 auto;
@@ -11919,11 +11920,11 @@ h5,
 
 /* Style the checkmark/indicator */
 .checkbox-primary {
-    color: #8d448b;
+    color: #4285F4;
 }
 
 .checkbox-primary input:checked~.checkmark:after {
-    color: #8d448b;
+    color: #4285F4;
 }
 
 .btn {
@@ -11941,26 +11942,26 @@ h5,
 }
 
 .btn.btn-primary {
-    background: #8d448b !important;
-    border: 1px solid #8d448b !important;
+    background: #4285F4 !important;
+    border: 1px solid #4285F4 !important;
     color: #fff !important;
 }
 
 .btn.btn-primary:hover {
-    border: 1px solid #8d448b;
+    border: 1px solid #4285F4;
     background: transparent;
-    color: #8d448b;
+    color: #4285F4;
 }
 
 .btn.btn-primary.btn-outline-primary {
-    border: 1px solid #8d448b;
+    border: 1px solid #4285F4;
     background: transparent;
-    color: #8d448b;
+    color: #4285F4;
 }
 
 .btn.btn-primary.btn-outline-primary:hover {
     border: 1px solid transparent;
-    background: #8d448b;
+    background: #4285F4;
     color: #fff;
 }
 

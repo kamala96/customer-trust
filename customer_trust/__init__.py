@@ -1,4 +1,3 @@
-import os
 from flask import Flask, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -14,8 +13,11 @@ login_manager.login_message_category = 'danger'
 csrf = CSRFProtect()
 
 PORTAL_TITLE = 'Trust Portal'
-RECAPTCHA_PUBLIC_KEY = "6LdcnnEhAAAAAALefXZ4W1B7R31Uf2_RySI4hsIF"
-RECAPTCHA_PRIVATE_KEY = "6LdcnnEhAAAAANgw9KtxUNFXrYIwB3RI_ooNp6TR"
+# RECAPTCHA_PUBLIC_KEY = "6LdcnnEhAAAAAALefXZ4W1B7R31Uf2_RySI4hsIF"
+# RECAPTCHA_PRIVATE_KEY = "6LdcnnEhAAAAANgw9KtxUNFXrYIwB3RI_ooNp6TR"
+
+# RECAPTCHA_PUBLIC_KEY = "6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J"
+# RECAPTCHA_PRIVATE_KEY = "6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu"
 SECRET_KEY = 'e0d82a214b61563b4569986e0c304584aefa87334da2729e91b082f24fa929c6'
 SQLALCHEMY_DATABASE_URI = 'sqlite:///db.sqlite'
 UPLOAD_FOLDER = 'customer_trust/static'
@@ -30,8 +32,8 @@ def create_app():
     app.config['SECRET_KEY'] = SECRET_KEY
     app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
     app.config['PORTAL_TITLE'] = PORTAL_TITLE
-    app.config['RECAPTCHA_PUBLIC_KEY'] = RECAPTCHA_PUBLIC_KEY
-    app.config['RECAPTCHA_PRIVATE_KEY'] = RECAPTCHA_PRIVATE_KEY
+    # app.config['RECAPTCHA_PUBLIC_KEY'] = RECAPTCHA_PUBLIC_KEY
+    # app.config['RECAPTCHA_PRIVATE_KEY'] = RECAPTCHA_PRIVATE_KEY
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # 4MB max-limit.
