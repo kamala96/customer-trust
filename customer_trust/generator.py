@@ -138,7 +138,7 @@ def generate_trust():
                                 response["factor"] = factor.factor_name
                                 response["data"] = scores
 
-                                print(scores)
+                                # print(scores)
                                 return jsonify(
                                     status=True,
                                     message="Success",
