@@ -1,6 +1,6 @@
-from flask import Blueprint, flash, render_template, url_for, request, redirect, abort
+from flask import Blueprint, flash, render_template, url_for, request, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 
 from .forms import LoginForm, RegisterForm
 from .models import User
@@ -12,6 +12,15 @@ csrf = CSRFProtect()
 
 auth = Blueprint('auth', __name__)
 # csrf.exempt(auth)
+
+
+def check_if_user_is_admin():
+    # check if user is allowed to
+    # e.g. JWT Token, Flask Login etc.
+    # ...
+    allowed = current_user.is_authenticated and current_user.is_admin == 1
+    if not allowed:
+        return redirect(url_for("auth.login"))
 
 
 @auth.route('/signup', methods=['GET', 'POST'])
