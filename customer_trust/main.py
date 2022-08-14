@@ -10,6 +10,7 @@ from customer_trust.models import Ecommerce_platforms, Ecommerce_products, Senti
 from flask_wtf.csrf import CSRFProtect
 from flask_expects_json import expects_json
 from werkzeug.utils import secure_filename
+import textwrap
 
 from . import PORTAL_TITLE
 
@@ -991,7 +992,7 @@ def sentiments_data():
         'data': [
             {
                 'sentiment_id': row.sentiment_id,
-                'sentiment_text': f'{row.sentiment_text[:70]}',
+                'sentiment_text': textwrap.shorten(row.sentiment_text, width=20, placeholder="..."),
                 'sentiment_score': 'Positive' if row.sentiment_score == 3 else ('Neutral' if row.sentiment_score == 2 else 'Negative'),
                 'sentiment_factor': row.factor.factor_name,
                 'sentiment_product': row.product.product_name,
@@ -1052,7 +1053,8 @@ def parseFile(filePath):
                             str(i+1) + '</i>'
                         errors.append(error)
                     else:
-                        new_data = Sentiments(sentiment_text=row['sentiment'], sentiment_score=row['score'], sentiment_factor=check_factor.factor_id,
+                        sentiment = row['sentiment']
+                        new_data = Sentiments(sentiment_text=sentiment.lower(), sentiment_score=row['score'], sentiment_factor=check_factor.factor_id,
                                               sentiment_product=check_product.product_id, sentiment_platform=check_platform.platform_id)
                         data_rows.append(new_data)
             if data_rows:
