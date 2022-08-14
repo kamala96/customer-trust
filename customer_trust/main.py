@@ -992,7 +992,7 @@ def sentiments_data():
         'data': [
             {
                 'sentiment_id': row.sentiment_id,
-                'sentiment_text': textwrap.shorten(row.sentiment_text, width=20, placeholder="..."),
+                'sentiment_text': textwrap.shorten(row.sentiment_text, width=50, placeholder="..."),
                 'sentiment_score': 'Positive' if row.sentiment_score == 3 else ('Neutral' if row.sentiment_score == 2 else 'Negative'),
                 'sentiment_factor': row.factor.factor_name,
                 'sentiment_product': row.product.product_name,
