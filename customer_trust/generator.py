@@ -1,55 +1,55 @@
 
-import string
+# import string
 from flask import Blueprint, jsonify, request, url_for
 from flask_wtf.csrf import CSRFProtect
 from flask_login import login_required, current_user
 from customer_trust.forms import GneratorForm
 from customer_trust.models import Ecommerce_products, Sentiments, Trust_factors
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-import re
-import nltk
+# import re
+# import nltk
 from operator import itemgetter
 
-nltk.download('stopwords')
+# nltk.download('stopwords')
 
 csrf = CSRFProtect()
 
-stopword = nltk.corpus.stopwords.words('english')
-ps = nltk.PorterStemmer()
+# stopword = nltk.corpus.stopwords.words('english')
+# ps = nltk.PorterStemmer()
 
 generator = Blueprint('generator', __name__)
 
 
-@login_required
-def clean(text):
-    text = re.sub('https?://\S+|www\.\S+', '', text)
-    text = re.sub(r'\s+', ' ', text, flags=re.I)
-    text = re.sub('\[.*?\]', '', text)
-    text = re.sub('\n', '', text)
-    text = re.sub('\w*\d\w*', '', text)
-    text = re.sub('<.*?>+', '', text)
-    text = str(text).lower()
-    text = re.sub('[%s]' % re.escape(string.punctuation), '', text)
-    return text
+# @login_required
+# def clean(text):
+#     text = re.sub('https?://\S+|www\.\S+', '', text)
+#     text = re.sub(r'\s+', ' ', text, flags=re.I)
+#     text = re.sub('\[.*?\]', '', text)
+#     text = re.sub('\n', '', text)
+#     text = re.sub('\w*\d\w*', '', text)
+#     text = re.sub('<.*?>+', '', text)
+#     text = str(text).lower()
+#     text = re.sub('[%s]' % re.escape(string.punctuation), '', text)
+#     return text
 
 
-@login_required
-def tokenization(text):
-    pattern = r'\W+'
-    text = re.split(pattern, text)
-    return text
+# @login_required
+# def tokenization(text):
+#     pattern = r'\W+'
+#     text = re.split(pattern, text)
+#     return text
 
 
-@login_required
-def remove_stopwords(text):
-    text = [word for word in text if word not in stopword]
-    return text
+# @login_required
+# def remove_stopwords(text):
+#     text = [word for word in text if word not in stopword]
+#     return text
 
 
-@login_required
-def stemming1(text):
-    text = [ps.stem(word) for word in text]
-    return text
+# @login_required
+# def stemming1(text):
+#     text = [ps.stem(word) for word in text]
+#     return text
 
 
 @login_required
