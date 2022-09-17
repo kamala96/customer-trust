@@ -359,6 +359,7 @@
 
   $("#submitBtn").click(function (event) {
     event.preventDefault();
+
     $("#trustChart").remove();
     $("#contributorsChart").remove();
 
@@ -374,13 +375,10 @@
     let is_factor_checked =
       $("div.factors-checkbox-group.required :checkbox:checked").length > 0;
 
-    if (is_product_checked == false) {
+    if (is_product_checked == false || is_factor_checked == false) {
+      const textStatus = is_product_checked == false ? "product!" : "factor!";
       bootbox.alert(
-        '<p class="text-danger">Oops!, Please select a product!</p>'
-      );
-    } else if (is_factor_checked == false) {
-      bootbox.alert(
-        '<p class="text-danger">Oops!, Please select a trust factor!</p>'
+        '<p class="text-danger">Oops!, Please select a ' + textStatus + "</p>"
       );
     } else {
       // let data = $("#trustGenerateForm").serialize();
