@@ -114,6 +114,7 @@ class Trust_factors(db.Model, UserMixin):
     factor_id = db.Column(db.Integer, primary_key=True)
     factor_name = db.Column(db.String(100), unique=True, nullable=False)
     factor_slug = db.Column(db.String(100), unique=True, nullable=False)
+    factor_rating = db.Column(db.Integer)
     factor_desc = db.Column(db.Text)
     factor_keywords = db.Column(db.Text)
     factor_products = db.Column(db.Text)
@@ -133,6 +134,7 @@ class Trust_factors(db.Model, UserMixin):
             'factor_id': self.factor_id,
             'factor_name': self.factor_name,
             'factor_slug': self.factor_slug,
+            'factor_rating': self.factor_rating,
             'factor_desc': self.factor_desc,
             'factor_keywords': self.factor_keywords,
             'factor_products': self.factor_products,

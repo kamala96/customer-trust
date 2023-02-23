@@ -69,8 +69,6 @@ class ImportSentimentsForm(FlaskForm):
     submit = SubmitField('Submit', render_kw={"value": "Import Data"})
 
 
-class GneratorForm(FlaskForm):
+class GeneratorForm(FlaskForm):
     product = IntegerField('Product', validators=[InputRequired(
-        message="Make sure you have submitted a valid entry")])
-    factor = IntegerField('Trust Factor', validators=[InputRequired(
-        message="Make sure you have submitted a valid entry")])
+        message="Product is required to enable trust computation")])

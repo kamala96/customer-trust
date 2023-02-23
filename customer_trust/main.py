@@ -51,6 +51,16 @@ schema_add_prod_to_factor = {
     },
     'required': ['factor', 'product']
 }
+
+schema_change_factor_rating = {
+    'type': 'object',
+    'properties': {
+        'factor': {'type': 'number'},
+        "rating": {"type": "number"},
+    },
+    'required': ['factor', 'rating']
+}
+
 schema_delete_prod_from_factor = {
     'type': 'object',
     'properties': {
@@ -67,6 +77,8 @@ schema_addDel_keyword_to_factor = {
     },
     'required': ['factor', 'keyword']
 }
+
+ratings = {'1': 'Low', '2': 'Moderate', '3': 'High', '4': 'Very High'}
 
 
 @main.route('/')
@@ -91,6 +103,7 @@ def resources():
     return render_template(
         'resources.html',
         title=title,
+        ratings=ratings,
         pltform=AddPlatformForm(),
         productform=AddProductForm(),
         factorform=AddFactorForm(),
@@ -673,7 +686,7 @@ def add_factors():
                 slug = slug.strip().lower().replace(" ", "_")
 
                 new_factor = Trust_factors(
-                    factor_name=form.factor_name.data, factor_desc=form.factor_description.data, factor_slug=slug)
+                    factor_name=form.factor_name.data, factor_rating=1, factor_desc=form.factor_description.data, factor_slug=slug)
                 db.session.add(new_factor)
                 db.session.commit()
                 message = 'Success!, <i class="font-weight-bold text-success">' + \
@@ -778,6 +791,39 @@ def factor_add_product():
                         message='Oops!, <i class="font-weight-bold text-danger">' +
                         new_product_input + '</i> entry arleady exist </p>',
                     )
+    except Exception as e:
+        return jsonify(
+            status=False,
+            message='<p class="text-danger">' + str(e) + '</p>'
+        )
+
+
+@main.route('/api/factors-data/change-rating', methods=['POST'])
+@login_required
+@expects_json(schema_change_factor_rating)
+def factor_change_rating():
+    try:
+        rt = g.data['rating']
+        if str(rt) not in ratings:
+            return jsonify(
+                status=False,
+                message='<i class="font-weight-bold text-danger"> Oops!, entry not exist </i>',
+            )
+        else:
+            factor = Trust_factors.query.filter_by(
+                factor_id=g.data['factor']).first()
+            if not factor:
+                return jsonify(
+                    status=False,
+                    message='<p class="text-danger">Oops!, Invalid inputs</p>'
+                )
+            else:
+                factor.factor_rating = rt
+                db.session.commit()
+                return jsonify(
+                    status=True,
+                    message='<i class="font-weight-bold text-success">Success!, entry has been saved </i>',
+                )
     except Exception as e:
         return jsonify(
             status=False,
